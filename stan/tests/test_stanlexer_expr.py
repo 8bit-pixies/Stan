@@ -1,11 +1,11 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import unittest
 
 #from SAS import saslexer as sasl
-import os
-import sys
-sys.path.append('H:/My Documents/Scripts/SAS-py/SASpy/SAS')
 
-import saslexer_expr as sase
+from stan import stanlexer_expr as stan_e
 
 class TestMatch(unittest.TestCase):
     expr_cases = (
@@ -17,7 +17,9 @@ class TestMatch(unittest.TestCase):
     
     def test_exprTest(self):
         for data, ans in self.expr_cases:
-            result = sase.expr.parseString(data)
+            result = stan_e.expr.parseString(data)
             self.assertEqual(result.asList(), ans)
 
-unittest.main()
+if __name__ == '__main__':
+    unittest.main()
+

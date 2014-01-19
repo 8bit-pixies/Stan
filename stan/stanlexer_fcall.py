@@ -2,19 +2,20 @@
 
 from pyparsing import *
 
-testData = """
-funcName("paramOne", &paramTwo, fTwo(p0, p1), paramFour);
-"""
+point = Literal( "." )
+STR_ = (QuotedString(quoteChar="'", escChar='\\', multiline=True, unquoteResults=False) | 
+        QuotedString(quoteChar='"', escChar='\\', multiline=True, unquoteResults=False)).setResultsName('str_type')
+fnumber = Combine(Word(nums) + Optional( point + Optional( Word(nums)))).setResultsName('num_type')
 
 expr = Forward() 
  
-LPAR, RPAR, SEMI = map(Suppress, "();")
+LPAR = "("
+RPAR = ")"
 ID_ = Word(alphas+"_", alphanums+"_")
-function_call = Group(ID_.setResultsName("name") + LPAR + Group(Optional(delimitedList(expr))) + RPAR)
-integer = Regex(r"-?\d+")
-real = Regex(r"-?\d+\.\d*")
+function_call = Group(ID_ + LPAR + Group(Optional(delimitedList(expr))) + RPAR)
+
  
-operand = (function_call | ID_ | real | integer | quotedString )
+operand = (function_call | Group(ID_).setResultsName('id') | STR_ | fnumber | STR_ )
 expop = Literal('^')
 signop = oneOf('+ -')
 multop = oneOf('* /')

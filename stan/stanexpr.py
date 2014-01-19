@@ -1,15 +1,13 @@
 from pyparsing import *
-from saslexer_fcall import function_call as FUNC_
-
-exprStack = []
+#from stanlexer_fcall import expr as FCALL_
 
 point = Literal( "." )
-fnumber = Combine(Word(nums) + Optional( point + Optional( Word(nums))))
+fnumber = Combine(Word(nums) + Optional( point + Optional( Word(nums)))).setResultsName('num_type')
  
-ID_ = Word(alphas+"_", alphanums+"_")
-STR_ = quotedString.addParseAction(removeQuotes)\
-
-# Operators
+ID_ = Word(alphas+'_', alphanums)
+STR_ = (QuotedString(quoteChar="'", escChar='\\', multiline=True, unquoteResults=False) | 
+        QuotedString(quoteChar='"', escChar='\\', multiline=True, unquoteResults=False)).setResultsName('str_type')
+    
  
 plus  = Literal( "+" )
 minus = Literal( "-" )
@@ -23,26 +21,13 @@ multop = mult | div
 pi    = CaselessLiteral( "_PI_" )
 
 expr = Forward()
-atom = ( FUNC_ | pi | fnumber | ID_ | STR_ | (lpar + expr +rpar)) # deal with `a = -1` later
+FCALL_ = ID_ + "(" + Optional(expr + ZeroOrMore( "," + expr )) + ")"
+atom = (FCALL_.setResultsName('fcall') | pi | fnumber | STR_ | Group(ID_.setResultsName('id')) | (lpar + expr +rpar)) # deal with `a = -1` later
 
 # by defining exponentiation as "atom [ ^ factor ]..." instead of "atom [ ^ atom ]...", we get right-to-left exponents, instead of left-to-righ
 # that is, 2^3^2 = 2^(3^2), not (2^3)^2.
 #factor = Forward()
 #factor << atom + ZeroOrMore( ( expop + factor ).setParseAction( pushFirst ) )
-
-# ensure precedence is kept
 term = Forward()
 term = atom + ZeroOrMore(( multop + expr ))
-expr << (term + ZeroOrMore(( addop + expr )))
-
-#def test(s):
-#    print s, "->"
-#    print expr.parseString(s)
-#    # insert stuff...
-
-#expr.validate()
-#test("1+2")
-#test("a+b+2")
-#test('"Chapman"')
-#test('substr(Name,1,1)')
-#test('( a + b)')
+expr << term + ZeroOrMore(( addop + expr ))
