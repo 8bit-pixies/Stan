@@ -1,6 +1,6 @@
 # sas parse.py
 
-from stanlex import dataStepStmt
+from data_lex import dataStepStmt
 import pandas as pd
 from numpy import random
 
@@ -60,7 +60,7 @@ test = df.rename(columns={"z": "b"})
 # 3. the statments in the order that is parsed
 # 4. data statement options (inline)
 
-cstr = """data test;
+cstr = """data test(rename=(b = z));
 set df (rename=(z = b) drop= x y);
 t = "chapman";
 c = 1+2;
@@ -76,19 +76,20 @@ bd = inf.asDict()
 
 print "Computing String...\n"
 
-ss = ''
-ss = bd['set']['name'][0]
-data = bd['data']['name'][0]
-
-
 def id_convert(v_ls, data):
+    # this statement needs to have testing
+    # refer to stanexpr.ID_ to see how identifiers are parsed
     var_stmt = []
     for el in v_ls:
         try:            
-            var_stmt.append("%s['%s']" % (data, el.id)) #if the expr is an identifier
+            var_stmt.append("%s%s" % (data, el.id)) #if the expr is an identifier
         except:
             var_stmt.append(el)
     return ''.join(var_stmt)
+
+ss = ''
+ss = bd['set']['name'][0]
+data = bd['data']['name'][0]
 
 # looking through set options
 if len(bd['set'].keys()) == 0: 
@@ -99,17 +100,34 @@ else:
         if key == 'rename':
             #print bd['set']['rename']
             rename_ls = ",".join(["'%s':'%s'" % (x,y) for x,y in bd['set']['rename']])
-            ss += '.rename(columns={%s})' % rename_ls
+            ss += '.rename(columns={%s})' % (rename_ls)
         if key == 'drop':
             drop_ls = ",".join(["'%s'" % x for x in bd['set']['drop']])
             ss += '.drop([%s],1)' % drop_ls
     ss = "%s=%s\n" % (data, ss)
-    if 'logic_stmt' in bd.keys():
-        for stmt in bd['logic_stmt']:
-            print stmt
-            var_stmt = id_convert(stmt[1:], data)
-            ss += "%s['%s']=%s\n" % (data, stmt[0], var_stmt)
-            
+
+# check logic_stmt
+if 'logic_stmt' in bd.keys():
+    for stmt in bd['logic_stmt']:
+        print stmt
+        var_stmt = id_convert(stmt[1:], data)
+        ss += "%s['%s']=%s\n" % (data, stmt[0], var_stmt)
+
+# check data options
+if len(bd['data'].keys()) == 0: 
+    pass
+else: 
+    # check all the keys...
+    datas = data
+    for key in bd['data'].keys():
+        if key == 'rename':
+            #print bd['data']['rename']
+            rename_ls = ",".join(["'%s':'%s'" % (x,y) for x,y in bd['data']['rename']])
+            datas += '.rename(columns={%s})' % (rename_ls)
+        if key == 'drop':
+            drop_ls = ",".join(["'%s'" % x for x in bd['data']['drop']])
+            datas += '.drop([%s],1)' % drop_ls
+    ss += "%s=%s\n" % (data, datas)
 
 print "Soln is : \n\n", ss
 

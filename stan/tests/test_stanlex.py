@@ -9,7 +9,7 @@ import unittest
 
 #from SAS import saslexer as sasl
 
-from stan import stanlex as stan_l
+from stan.data import data_lex as stan_l
 
 class TestMatch(unittest.TestCase):
 #    expr_cases = (

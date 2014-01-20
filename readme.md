@@ -22,7 +22,8 @@ Differences
   (similar to the SPDE engine).
 * `dates` will be suppported in a different manner (coming soon).
 * `format`, `length`, `informats` will not be necessary (we shall use `dtype` in `numpy`).
-* Pandas supports column names with spaces in it. This may cause issues since SAS automatically changes spaces to '_'. 
+* Pandas supports column names with spaces in it. This may cause issues since SAS automatically changes spaces to `_`. 
+* Pandas is case sensitive, SAS is not.
 
 Known Issues
 ------------
