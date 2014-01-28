@@ -20,7 +20,6 @@ dataset_opt_stmt = Optional("("+
                         Optional(Suppress(KEEP) + "=" + keep_stmt) +")")
 
 # data step options (not inline)
-
 opt_stmt = (
         (Suppress(RENAME) + rename_stmt + SEMI_) |
         (Suppress(KEEP) + keep_stmt + SEMI_) |
@@ -29,7 +28,7 @@ opt_stmt = (
     )
 
 
-# logic
+# data step logic
 s_stmt = Group(ID_ + Suppress("=") + ( LOGICAL_.setResultsName('logical') | EXPR_ ) + SEMI_)
 # data set statements
 

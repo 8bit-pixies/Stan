@@ -27,13 +27,6 @@ le = Keyword("<")
 lt = Keyword("<=")
 eq = Keyword("==") # change this otherwise statements like a = b = c can be confusing, since it would be a = (b == c)
 
-ge = Keyword(">=")
-gt = Keyword(">")
-le = Keyword("<")
-lt = Keyword("<=")
-eq = Keyword("==") # change this otherwise statements like a = b = c can be confusing, since it would be a = (b == c)
-
-
 lpar  = Literal( "(" )
 rpar  = Literal( ")" )
 addop  = plus | minus
@@ -45,32 +38,13 @@ EXPR_ = Forward()
 LOGICAL_ = Forward()
 LOGICAL_ << IF + EXPR_ + THEN + EXPR_ + Optional(ELSE + ((EXPR_ | LOGICAL_)))
 FCALL_ = ID_ + "(" + Optional(EXPR_ + ZeroOrMore( "," + EXPR_ )) + ")"
-atom = (FCALL_.setResultsName('fcall') | LOGICAL_.setResultsName('logical') | pi | NUM_ | STR_ | Group(ID_.setResultsName('id')) | (lpar + EXPR_ +rpar)) # deal with `a = -1` later
+atom = (FCALL_.setResultsName('fcall') | LOGICAL_.setResultsName('logical') | pi | NUM_ | STR_ | Group(ID_.setResultsName('id')) | (lpar + EXPR_ +rpar))
 
 term = Forward()
 term = atom + ZeroOrMore(( multop + EXPR_ ))
 log = term + ZeroOrMore(( addop + EXPR_ ))
 EXPR_ << log + ZeroOrMore(( logic + EXPR_ ))
 
+# the logical statement may need to be changed in the future to support the way sas handles it, particularly the "if then do end" pattern
 LOGICAL_ = Forward()
 LOGICAL_ << IF + Group(EXPR_).setResultsName('l_cond') + THEN + Group(EXPR_).setResultsName('l_result') + Group(Optional(ELSE.suppress() + (LOGICAL_ | EXPR_))).setResultsName('r_cond')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
