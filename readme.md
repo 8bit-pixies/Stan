@@ -28,12 +28,8 @@ Differences
 Known Issues
 ------------
 
-*  The grammar used forces the `set` statement to immediately follow `data` statement.
-*  Unary Minus is not supported (i.e. `value = -1` is not a valid statment, rather you'll have to type `value = 1 * -1`
-
 Will not Suport
 ---------------
 
-* `proc sql` will not be supported, please write using Python Pandas (nice to have)
 * `macro` facility (nice to have); You could just write pure python code for it? (python functions)
 
