@@ -3,7 +3,7 @@
 # mirror simple SQL format
 
 from pyparsing import *
-from data_expr import EXPR_, ID_, DATA, SET, RENAME, RUN, DROP, KEEP, SEMI_
+from data_expr import EXPR_, ID_, DATA, SET, RENAME, RUN, DROP, KEEP, SEMI_, LOGICAL_
     
 # set up logic
 dataStepStmt = Forward()
@@ -30,7 +30,7 @@ opt_stmt = (
 
 
 # logic
-s_stmt = Group(ID_ + Suppress("=") + EXPR_ + SEMI_)
+s_stmt = Group(ID_ + Suppress("=") + ( LOGICAL_.setResultsName('logical') | EXPR_ ) + SEMI_)
 # data set statements
 
 data_stmt = Group(Suppress(DATA) + ID_.setResultsName('name') + dataset_opt_stmt.setResultsName('data opt')).setResultsName('data') + SEMI_
@@ -38,7 +38,7 @@ set_stmt = Group(Suppress(SET) + ID_.setResultsName('name') + dataset_opt_stmt.s
 
 dataStepStmt << (data_stmt + 
                  set_stmt + 
-                 ZeroOrMore(opt_stmt) + 
-                 (ZeroOrMore(s_stmt)).setResultsName('logic_stmt') + 
+                 (ZeroOrMore(opt_stmt) &
+                 ZeroOrMore(s_stmt).setResultsName('stmt')) + 
                  RUN + SEMI_)
 
