@@ -1,6 +1,11 @@
-# sasplex.py
-#
-# mirror simple SQL format
+"""
+.. module:: data lex
+   :platform: Unix, Windows
+   :synopsis: Lexer data steps in SAS
+
+.. moduleauthor:: Chapman Siu <chapm0n.siu@gmail.com>
+
+"""
 
 from pyparsing import *
 from data_expr import EXPR_, ID_, DATA, SET, RENAME, RUN, DROP, KEEP, SEMI_, LOGICAL_

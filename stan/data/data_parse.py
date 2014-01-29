@@ -1,23 +1,66 @@
-# sas parse.py
+"""
+.. module:: data parse
+   :platform: Unix, Windows
+   :synopsis: Parser for SAS datastep
+
+.. moduleauthor:: Chapman Siu <chapm0n.siu@gmail.com>
+
+"""
 
 from data_lex import dataStepStmt
+from data_expr import RESERVED_KEYWORDS
 
 def id_convert(v_ls, data):
-    # this statement needs to have testing
-    # refer to stanexpr.ID_ to see how identifiers are parsed
+    """id convert changes variable ids to the Pandas format. Returns a converted string
+    
+    It iterates through list of tokens checking whether it is a reserved keyword
+    or not.
+    
+    Parameters
+    ----------
+    
+    v_ls : list of tokens
+    data : the source Pandas DataFrame
+    
+    """
     var_stmt = []
     for el in v_ls:
-        try:            
-            var_stmt.append("%s%s" % (data, el.id)) #if the expr is an identifier
+        try: 
+            if el.id not in RESERVED_KEYWORDS:
+                var_stmt.append("%s%s" % (data, el.id)) #if the expr is an identifier
+            else:
+                var_stmt.append(el)
         except:
             var_stmt.append(el)
+    print var_stmt
     return ''.join(var_stmt)
 
 def logic_convert(v_ls, data):
-    # this statement will need testing
-    # this will be a recursive call
+    """logic convert changes control flow statements to the Pandas format. Returns a converted string
+    
+    It attempts to parse the conditions and results to a lambda function, using the ternary operator in python
+    
+    For example:
 
-    # "neg" if b < 0 else "pos" if b > 0 else "zero"
+    .. code-block:: sas
+       
+       if b < 0 then "neg"
+       else if b > 0 then "pos"
+       else "zero"
+    
+    Would be equivalent to:
+    
+    .. code-block:: python
+    
+       "neg" if b < 0 else "pos" if b > 0 else "zero"
+    
+    Parameters
+    ----------
+    
+    v_ls : list of tokens
+    data : the source Pandas DataFrame
+    
+    """
     if 'l_result' in v_ls.keys() and 'l_cond' in v_ls.keys():
         lmd = '%s ' % id_convert(v_ls.l_result, 'x')
         lmd += 'if %s ' % id_convert(v_ls.l_cond, 'x')
@@ -28,6 +71,15 @@ def logic_convert(v_ls, data):
     return lmd
 
 def set_convert(v_ls, data):
+    """set convert converts the set options to Pandas format. Returns a converted string.
+        
+    Parameters
+    ----------
+    
+    v_ls : list of tokens
+    data : the source Pandas DataFrame
+    
+    """
     # check all the keys...
     ss = v_ls['name'][0]
     for key in v_ls.keys():
@@ -41,6 +93,15 @@ def set_convert(v_ls, data):
     return ss
 
 def data_convert(v_ls, data):
+    """data convert converts the data options to Pandas format. Returns a converted string.
+        
+    Parameters
+    ----------
+    
+    v_ls : list of tokens
+    data : the source Pandas DataFrame
+    
+    """
     datas = data
     for key in v_ls.keys():
         if key == 'rename':
@@ -53,6 +114,14 @@ def data_convert(v_ls, data):
     return "%s=%s\n" % (data, datas)
            
 def stan(cstr):
+    """stan parses the string and returns a Pandas compatible string
+    
+    Parameters
+    ----------
+    
+    cstr : string written in SAS-like language
+    
+    """
     inf = dataStepStmt.parseString(cstr)
     bd = inf.asDict()
     
@@ -87,4 +156,5 @@ def stan(cstr):
         datas = data_convert(bd['data'], data)
         ss += datas
     return ss
+
 

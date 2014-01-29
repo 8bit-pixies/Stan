@@ -1,3 +1,12 @@
+"""
+.. module:: data expr
+   :platform: Unix, Windows
+   :synopsis: Lexer for expressions and control flow logic
+
+.. moduleauthor:: Chapman Siu <chapm0n.siu@gmail.com>
+
+"""
+
 from pyparsing import *
 import functools
 
