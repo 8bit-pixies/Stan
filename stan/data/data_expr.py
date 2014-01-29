@@ -1,5 +1,5 @@
 """
-The :mod:`stan.data_expr` module is the grammar for SAS-like language.
+The :mod:`stan.data.data_expr` module is the grammar for SAS-like language.
 """
 
 from pyparsing import *

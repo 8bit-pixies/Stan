@@ -1,4 +1,6 @@
-#
+"""
+The :mod:`stan.proc.proc_expr` module is the parser for SAS-like language.
+"""
 
 from pyparsing import *
 import functools
@@ -10,25 +12,11 @@ SEMI_ = Suppress(";")
 DATA, PROC, RENAME, RUN, DROP, KEEP = map(functools.partial(Keyword, caseless=True),
                                     RESERVED_KEYWORDS)
 
-ID_ = ~MatchFirst(map(functools.partial(Keyword, caseless=True), RESERVED_KEYWORDS)) + \
-     Word(alphas+"_", alphanums+"_")
+ID_ = Word(alphas+"_", alphanums+"_")
 
 PROC_ = Forward()
 
-PROC_ << (PROC + ID_ + SEMI_ +  
-          ZeroOrMore(ID_ + Group(Optional(Suppress("=")) + OneOrMore(ID_) + SEMI_)) +
-          RUN + SEMI_) # this needs to be generic enough to handle unseen IDs before
-
-dd = PROC_.parseString("""proc describe ;
-    by week month;  var x;
-run;""")
-
-# should be able to handle merges and stuff, try a proc merge
-from pandas import DataFrame
-import pandas as pd
-
-left = DataFrame({'key': ['foo', 'foo'], 'lval': [1, 2]})
-right = DataFrame({'key': ['foo', 'foo'], 'rval': [4, 5]})
-
-pd.merge(left, right, on='key')
+PROC_ << (Suppress(PROC) + ID_.setResultsName('func') + Group(ZeroOrMore(ID_ + Optional(Suppress("=")) + OneOrMore(ID_))) + SEMI_ + 
+          Group(ZeroOrMore(ID_ + Optional(Suppress("=")) + OneOrMore(ID_))) + SEMI_ +
+          Suppress(RUN) + SEMI_) # this needs to be generic enough to handle unseen IDs before
 

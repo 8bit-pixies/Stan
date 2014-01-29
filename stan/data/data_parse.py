@@ -1,5 +1,5 @@
 """
-The :mod:`stan.data_parse` module is the parser for SAS-like language.
+The :mod:`stan.data.data_parse` module is the data step parser for SAS-like language.
 """
 
 from data_lex import dataStepStmt
