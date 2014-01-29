@@ -16,7 +16,7 @@ ID_ = Word(alphas+"_", alphanums+"_")
 
 PROC_ = Forward()
 
-PROC_ << (Suppress(PROC) + ID_.setResultsName('func') + Group(ZeroOrMore(ID_ + Optional(Suppress("=")) + OneOrMore(ID_))) + SEMI_ + 
-          Group(ZeroOrMore(ID_ + Optional(Suppress("=")) + OneOrMore(ID_))) + SEMI_ +
+PROC_ << (Suppress(PROC) + ID_.setResultsName('func') + ZeroOrMore(Group(ID_ + ((Suppress("=") + ID_) | OneOrMore(ID_))))  + SEMI_ + 
+          ZeroOrMore(Group(ID_ + ((Suppress("=") + ID_) | OneOrMore(ID_)))) + SEMI_ +
           Suppress(RUN) + SEMI_) # this needs to be generic enough to handle unseen IDs before
 

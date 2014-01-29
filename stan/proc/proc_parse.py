@@ -2,38 +2,49 @@
 The :mod:`stan.proc.proc_parse` module is the proc parser for SAS-like language.
 """
 
-from proc_expr import RESERVED_KEYWORDS, PROC_
+from __future__ import absolute_import
 
-cstr = """proc describe data = test;
-    by sex;
-   run;"""
+from .proc_expr import RESERVED_KEYWORDS, PROC_
+from ..proc_functions.describe import * 
 
-dd = PROC_.parseString(cstr)
+cstr = """proc describe data = df1 out=df2;
+by a;
+run;"""
 
-ss = ''
+#def describe(data, by):
+#    return data.groupby(by).describe()  
 
-# this is the function we're running
-
-def get_args(v_ls):
+def proc_args(v_ls):
+    """proc args converts procedure statements to python function equivalents
+    
+    Parameters
+    ----------
+    
+    v_ls : list of tokens
+    
+    Notes 
+    -----
+    
+    ``data`` and ``output``/``out`` are protected variables.    
+    """
     sls = []
-    for ls in v_ls:        
+    preprend = ''
+    for ls in v_ls[1:]:        
         if len(ls[1:]) > 1:
             sls.append("%s=['%s']" % (ls[0], "','".join(ls[1:])))
         else:
-            if ls[0] in ['data', 'output', 'out']:
+            if ls[0] in ['data']:
                 sls.append("%s=%s" % (ls[0], ls[1]))
+            elif ls[0] in ['output', 'out']:
+                preprend += '%s=' % ls[1]
             else:
                 sls.append("%s='%s'" % (ls[0], ls[1]))
-    return ",".join(sls)
+    return '%s%s(%s)' % (preprend, v_ls[0], ','.join(sls))
 
-
-ss = '%s(%s)' % (dd[0], get_args(dd[1:]))
+dd = PROC_.parseString(cstr)
+ss = proc_args(dd)
 
 from pandas import DataFrame
-
 df1 = DataFrame({'a' : [1, 0, 1], 'b' : [0, 1, 1] }, dtype=bool)
+exec(ss)
 
-#df1 = DataFrame({'a' : [1, 0, 1], 'b' : [0, 1, 1] }, dtype=bool)
-
-def describe(data, by):
-    return data.groupby(by).describe()  
