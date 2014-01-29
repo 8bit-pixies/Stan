@@ -1,10 +1,5 @@
 """
-.. module:: data parse
-   :platform: Unix, Windows
-   :synopsis: Parser for SAS datastep
-
-.. moduleauthor:: Chapman Siu <chapm0n.siu@gmail.com>
-
+The :mod:`stan.data_parse` module is the parser for SAS-like language.
 """
 
 from data_lex import dataStepStmt
@@ -126,7 +121,6 @@ def stan(cstr):
     bd = inf.asDict()
     
     ss = ''
-    #ss = bd['set']['name'][0]
     data = bd['data']['name'][0]
     
     # looking through set options

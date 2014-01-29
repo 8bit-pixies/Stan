@@ -1,10 +1,5 @@
 """
-.. module:: data lex
-   :platform: Unix, Windows
-   :synopsis: Lexer data steps in SAS
-
-.. moduleauthor:: Chapman Siu <chapm0n.siu@gmail.com>
-
+The :mod:`stan.data_lex` module is the lexer for SAS-like language.
 """
 
 from pyparsing import *
