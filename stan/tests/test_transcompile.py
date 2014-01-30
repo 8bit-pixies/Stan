@@ -26,7 +26,7 @@ class Test_stan(unittest.TestCase):
     run;
     
     """
-        self.assertTrue(transcompile.transcompile(cstr) == "test=test\ntest=describe.describe(data=test,by='sex',var='age')\ntest1=test\n")
+        self.assertTrue(transcompile(cstr) == "test=test\ntest=describe.describe(data=test,by='sex',var='age')\ntest1=test\n")
     
 if __name__ == '__main__':
     unittest.main()
