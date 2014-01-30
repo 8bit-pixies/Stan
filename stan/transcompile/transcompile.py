@@ -1,5 +1,5 @@
 """
-The :mod:`stan.stan` module is the key module to convert a full script and run it
+The :mod:`stan.transcompile` module is the key module to convert a full script and run it
 """
 
 import re

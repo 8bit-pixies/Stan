@@ -18,7 +18,7 @@ setup(
     url              = 'https://github.com/chappers/Stan/',
     license          = 'MIT License',
 
-    packages         = ['stan', 'stan.data', 'stan.proc', 'stan.proc_functions'],
+    packages         = ['stan', 'stan.data', 'stan.proc', 'stan.proc_functions', 'stan.transcompile'],
 
     classifiers      = [],
 
