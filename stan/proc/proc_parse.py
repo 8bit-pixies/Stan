@@ -4,6 +4,7 @@ The :mod:`stan.proc.proc_parse` module is the proc parser for SAS-like language.
 
 from stan.proc.proc_expr import RESERVED_KEYWORDS, PROC_
 import stan.proc_functions as proc_func
+import pkgutil
 
 def proc_parse(cstr):
     """proc parse converts procedure statements to python function equivalents
@@ -37,7 +38,7 @@ def proc_parse(cstr):
                 
     # try to find v_ls[0] in the `proc_func` namespace...
     f_name = v_ls[0].strip().lower()
-    if f_name in proc_func.__dict__.keys(): # is there a better way?
+    if f_name in [name for _, name, _ in pkgutil.iter_modules(proc_func.__path__)]: # is there a better way?
         func_name = "%s.%s" % (f_name, f_name)
     else:
         func_name = f_name
