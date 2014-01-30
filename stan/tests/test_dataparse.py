@@ -37,10 +37,8 @@ run;"""
 
 def substr(ss, start, length):
     return ss[start-1:start+length-1]
-
 	
-class TestMatch(unittest.TestCase):
-           
+class TestMatch(unittest.TestCase):          
     
     def test_exprTest(self):
         estr = stan_p.data_parse(cstr)
@@ -49,6 +47,8 @@ class TestMatch(unittest.TestCase):
         
     def test_parse(self):
         self.assertTrue(stan_p.data_parse("""data test; set test1; run;""").strip() == "test=test1")
+        self.assertTrue(stan_p.data_parse("""data test (rename=(a = b)); set test1; run;""") == "test=test1\ntest=test.rename(columns={'a':'b'})\n")
+        self.assertTrue(stan_p.data_parse("""data test (drop=a b d ); set test1; run;""") == "test=test1\ntest=test.drop(['a','b','d'],1)\n")
         
 if __name__ == '__main__':
     unittest.main()
