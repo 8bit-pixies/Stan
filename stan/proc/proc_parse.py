@@ -2,8 +2,8 @@
 The :mod:`stan.proc.proc_parse` module is the proc parser for SAS-like language.
 """
 
-from .proc_expr import RESERVED_KEYWORDS, PROC_
-from ..proc_functions import * 
+from stan.proc.proc_expr import RESERVED_KEYWORDS, PROC_
+from stan.proc_functions import * 
 
 __all__ = ['proc_parse']
 

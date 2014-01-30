@@ -8,6 +8,8 @@ import re
 from .proc.proc_parse import proc_parse
 from .data.data_parse import data_parse
 
+__all__ = ['transcompile']
+
 def transcompile(cstr):
     find_rule = re.compile(r'(((?:data)|(?:proc)).*?(run\s*;))', re.I | re.DOTALL)
     f_all = find_rule.findall(cstr)

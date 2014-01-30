@@ -2,8 +2,8 @@
 The :mod:`stan.data.data_parse` module is the data step parser for SAS-like language.
 """
 
-from .data_lex import dataStepStmt
-from .data_expr import RESERVED_KEYWORDS
+from stan.data.data_lex import dataStepStmt
+from stan.data.data_expr import RESERVED_KEYWORDS
 
 __all__ = ['data_parse']
 
