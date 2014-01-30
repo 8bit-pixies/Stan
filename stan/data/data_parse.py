@@ -27,7 +27,6 @@ def id_convert(v_ls, data):
                 var_stmt.append(el)
         except:
             var_stmt.append(el)
-    print var_stmt
     return ''.join(var_stmt)
 
 def logic_convert(v_ls, data):
@@ -59,7 +58,6 @@ def logic_convert(v_ls, data):
     if 'l_result' in v_ls.keys() and 'l_cond' in v_ls.keys():
         lmd = '%s ' % id_convert(v_ls.l_result, 'x')
         lmd += 'if %s ' % id_convert(v_ls.l_cond, 'x')
-        # print "r_cond: ", logic_convert(v_ls.r_cond, 'x')
         lmd += 'else %s ' % id_convert(logic_convert(v_ls.r_cond, 'x'), 'x')
     else:
         lmd = id_convert(v_ls, 'x')
@@ -100,7 +98,6 @@ def data_convert(v_ls, data):
     datas = data
     for key in v_ls.keys():
         if key == 'rename':
-            #print bd['data']['rename']
             rename_ls = ",".join(["'%s':'%s'" % (x,y) for x,y in v_ls['rename']])
             datas += '.rename(columns={%s})' % (rename_ls)
         if key == 'drop':
