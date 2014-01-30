@@ -43,7 +43,7 @@ class TestMatch(unittest.TestCase):
            
     
     def test_exprTest(self):
-        estr = stan_p.stan(cstr)
+        estr = stan_p.data_parse(cstr)
         exec(estr)
         self.assertTrue(len(test.columns) > 1)
         

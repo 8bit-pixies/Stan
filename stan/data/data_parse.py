@@ -108,8 +108,8 @@ def data_convert(v_ls, data):
             datas += '.drop([%s],1)' % drop_ls
     return "%s=%s\n" % (data, datas)
            
-def stan(cstr):
-    """stan parses the string and returns a Pandas compatible string
+def data_parse(cstr):
+    """data_parse parses the string and returns a Pandas compatible string
     
     Parameters
     ----------
