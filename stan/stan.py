@@ -11,16 +11,12 @@ from .data.data_parse import data_parse
 def transcompile(cstr):
     find_rule = re.compile(r'(((?:data)|(?:proc)).*?(run\s*;))', re.I | re.DOTALL)
     f_all = find_rule.findall(cstr)
-    for x in  f_all:
-        print x[0]
     
     ss = ''
     for code in f_all:
         if code[1].strip().lower() == 'data':
-            print ss
             ss += '\n%s\n' % data_parse(code[0])
         elif code[1].strip().lower() == 'proc':
-            print ss
             ss += '\n%s\n' % proc_parse(code[0])
         else:
             raise error("invalid code found")
@@ -43,4 +39,5 @@ data test1;
 run;
 
 """
+
 print transcompile(cstr)

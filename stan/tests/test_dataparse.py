@@ -47,6 +47,8 @@ class TestMatch(unittest.TestCase):
         exec(estr)
         self.assertTrue(len(test.columns) > 1)
         
-
+    def test_parse(self):
+        self.assertTrue(stan_p.data_parse("""data test; set test1; run;""").strip() == "test=test1")
+        
 if __name__ == '__main__':
     unittest.main()

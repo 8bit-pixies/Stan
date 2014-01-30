@@ -106,7 +106,7 @@ def data_convert(v_ls, data):
         if key == 'drop':
             drop_ls = ",".join(["'%s'" % x for x in v_ls['drop']])
             datas += '.drop([%s],1)' % drop_ls
-    return "%s=%s\n" % (data, datas)
+    return "%s=%s\n" % (data, datas) if data != datas else ""
            
 def data_parse(cstr):
     """data_parse parses the string and returns a Pandas compatible string
