@@ -3,7 +3,7 @@ The :mod:`stan.proc.proc_parse` module is the proc parser for SAS-like language.
 """
 
 from stan.proc.proc_expr import RESERVED_KEYWORDS, PROC_
-from stan.proc_functions import * 
+import stan.proc_functions as proc_func
 
 def proc_parse(cstr):
     """proc parse converts procedure statements to python function equivalents
@@ -34,7 +34,15 @@ def proc_parse(cstr):
                 preprend += '%s=' % ls[1]
             else:
                 sls.append("%s='%s'" % (ls[0], ls[1]))
-    return '%s%s.%s(%s)' % (preprend, v_ls[0], v_ls[0], ','.join(sls)) # this statement is a bit dodgy
+                
+    # try to find v_ls[0] in the `proc_func` namespace...
+    f_name = v_ls[0].strip().lower()
+    if f_name in proc_func.__dict__.keys(): # is there a better way?
+        func_name = "%s.%s" % (f_name, f_name)
+    else:
+        func_name = f_name
+    
+    return '%s%s(%s)' % (preprend, func_name, ','.join(sls)) # this statement is a bit dodgy
 
 
 
