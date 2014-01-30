@@ -18,7 +18,10 @@ setup(
     url              = 'https://github.com/chappers/Stan/',
     license          = 'MIT License',
 
-    packages         = ['stan', 'stan.data', 'stan.proc', 'stan.proc_functions', 'stan.transcompile'],
+    packages         = ['stan', 'stan.data', 'stan.proc', 'stan.proc_functions'],
 
     classifiers      = [],
+
+    install_requires = ['pyparsing', 'pandas']
 )
+
