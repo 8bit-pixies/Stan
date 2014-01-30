@@ -5,8 +5,6 @@ The :mod:`stan.data.data_parse` module is the data step parser for SAS-like lang
 from stan.data.data_lex import dataStepStmt
 from stan.data.data_expr import RESERVED_KEYWORDS
 
-__all__ = ['data_parse']
-
 def id_convert(v_ls, data):
     """id convert changes variable ids to the Pandas format. Returns a converted string
     

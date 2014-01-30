@@ -2,11 +2,11 @@
 The :mod:`stan.stan` module is the key module to convert a full script and run it
 """
 
-import sys
 import re
 
-from proc.proc_parse import proc_parse
-from data.data_parse import data_parse
+from stan.data.data_parse import data_parse
+from stan.proc.proc_parse import proc_parse
+
 
 def transcompile(cstr):
     find_rule = re.compile(r'(((?:data)|(?:proc)).*?(run\s*;))', re.I | re.DOTALL)
@@ -19,7 +19,7 @@ def transcompile(cstr):
         elif code[1].strip().lower() == 'proc':
             ss += '%s\n' % proc_parse(code[0])
         else:
-            raise error("invalid code found")
+            raise "invalid code found"
     
     return re.sub(r'\n+', '\n', ss)
 

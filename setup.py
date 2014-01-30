@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 #import sandman
 import stan
 
-long_description = open('README.md').read()
+long_description = open('README.rst').read()
 
 MAJOR = 0
 MINOR = 0

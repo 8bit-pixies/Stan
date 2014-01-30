@@ -5,8 +5,6 @@ The :mod:`stan.proc.proc_parse` module is the proc parser for SAS-like language.
 from stan.proc.proc_expr import RESERVED_KEYWORDS, PROC_
 from stan.proc_functions import * 
 
-__all__ = ['proc_parse']
-
 def proc_parse(cstr):
     """proc parse converts procedure statements to python function equivalents
     

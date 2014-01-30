@@ -6,7 +6,7 @@ Created on Sat Jan 18 12:54:30 2014
 """
 
 import unittest
-from stan import stan
+from stan.transcompile import transcompile
 
 class Test_stan(unittest.TestCase):  
     #"test=test\ntest=describe.describe(data=test,by='sex',var='age')\ntest1=test\n"
@@ -26,7 +26,7 @@ class Test_stan(unittest.TestCase):
     run;
     
     """
-        self.assertTrue(stan.transcompile(cstr) == "test=test\ntest=describe.describe(data=test,by='sex',var='age')\ntest1=test\n")
+        self.assertTrue(transcompile.transcompile(cstr) == "test=test\ntest=describe.describe(data=test,by='sex',var='age')\ntest1=test\n")
     
 if __name__ == '__main__':
     unittest.main()
