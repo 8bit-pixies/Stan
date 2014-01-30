@@ -24,7 +24,8 @@ setup(
                     ],    
     description='Statistical Analysis System Transcompiler to Python',
     long_description=long_description,
-    packages=['stan'],   
+    packages=['stan', 'stan.data', 'stan.proc', 'stan.proc_functions'],
+    #package_dir={'stan': 'stan'},
     include_package_data=True,
     platforms='any',
 )
