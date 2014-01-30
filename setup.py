@@ -1,10 +1,4 @@
-from __future__ import print_function
-from setuptools import setup, find_packages
-
-#import sandman
-import stan
-
-long_description = open('README.rst').read()
+from setuptools import setup
 
 MAJOR = 0
 MINOR = 0
@@ -13,19 +7,18 @@ VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 
 
 setup(
-    name='stan',
-    version=VERSION,
-    url='http://github.com/chappers/stan/',
-    license='MIT',
-    author='Chapman Siu',
-    author_email='chapm0n.siu@gmail.com',
-    install_requires=['pandas>=0.12.0',
-                      'pyparsing>=2.0.0'
-                    ],    
-    description='Statistical Analysis System Transcompiler to Python',
-    long_description=long_description,
-    packages=['stan', 'stan.data', 'stan.proc', 'stan.proc_functions'],
-    #package_dir={'stan': 'stan'},
-    include_package_data=True,
-    platforms='any',
+    name             = 'stan',
+    version          = VERSION,
+
+    description      = 'Statistical Analysis System Transcompiler to Python',
+    long_description = open("README.rst").read(),
+
+    author           = 'Chapman Siu',
+    author_email     = 'chapm0n.siu@gmail.com',
+    url              = 'https://github.com/chappers/Stan/',
+    license          = 'MIT License',
+
+    packages         = ['stan'],
+
+    classifiers      = [],
 )
