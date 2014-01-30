@@ -15,13 +15,13 @@ def transcompile(cstr):
     ss = ''
     for code in f_all:
         if code[1].strip().lower() == 'data':
-            ss += '\n%s\n' % data_parse(code[0])
+            ss += '%s\n' % data_parse(code[0])
         elif code[1].strip().lower() == 'proc':
-            ss += '\n%s\n' % proc_parse(code[0])
+            ss += '%s\n' % proc_parse(code[0])
         else:
             raise error("invalid code found")
     
-    return ss
+    return re.sub(r'\n+', '\n', ss)
 
 
 cstr = """
@@ -40,4 +40,5 @@ run;
 
 """
 
+#"test=test\ntest=describe.describe(data=test,by='sex',var='age')\ntest1=test\n"
 print transcompile(cstr)
