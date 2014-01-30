@@ -24,21 +24,3 @@ def transcompile(cstr):
     return re.sub(r'\n+', '\n', ss)
 
 
-cstr = """
-Data test;
-    set test;
-  run;
-  
-proc describe data = test out = test;
-    by sex;
-    var age;
-run;
-
-data test1;
-    set test;
-run;
-
-"""
-
-#"test=test\ntest=describe.describe(data=test,by='sex',var='age')\ntest1=test\n"
-print transcompile(cstr)
