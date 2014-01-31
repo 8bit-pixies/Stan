@@ -17,9 +17,11 @@ ID_ = Word(alphas+"_", alphanums+"_")
 STR_ = (QuotedString(quoteChar="'", escChar='\\', multiline=True, unquoteResults=True) | 
         QuotedString(quoteChar='"', escChar='\\', multiline=True, unquoteResults=True)).setResultsName('str_type') # since there is no string manipulation we should unquote the result
 
+NUM_ = Combine(Optional("-") + Word(nums) + Optional( Literal( "." ) + Optional( Word(nums)))).setResultsName('num_type')
+
 PROC_ = Forward()
 
-PROC_ << (Suppress(PROC) + ID_.setResultsName('func') + ZeroOrMore(Group(ID_ + ((Suppress("=") + (STR_ | ID_)) | OneOrMore(STR_ | ID_))))  + SEMI_ + 
-          ZeroOrMore(Group(ID_ + ((Suppress("=") + (STR_ | ID_)) | OneOrMore(STR_ | ID_))) + SEMI_) +
+PROC_ << (Suppress(PROC) + ID_.setResultsName('func') + ZeroOrMore(Group(ID_ + ((Suppress("=") + (STR_ | NUM_ | ID_)) | OneOrMore(STR_ | NUM_ | ID_))))  + SEMI_ + 
+          ZeroOrMore(Group(ID_ + ((Suppress("=") + (STR_ | NUM_ | ID_)) | OneOrMore(STR_ | NUM_ | ID_))) + SEMI_) +
           Suppress(RUN) + SEMI_) # this needs to be generic enough to handle unseen IDs before
 

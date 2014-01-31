@@ -3,6 +3,8 @@ The :mod:`stan.transcompile` module is the key module to convert a full script a
 """
 
 import re
+from pyparsing import *
+import functools
 
 from stan.data.data_parse import data_parse
 from stan.proc.proc_parse import proc_parse
