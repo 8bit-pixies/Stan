@@ -36,8 +36,8 @@ is open to whoever wants to implement it.
 Write Documentation
 ~~~~~~~~~~~~~~~~~~~
 
-{{ cookiecutter.project_name }} could always use more documentation, whether as part of the 
-official {{ cookiecutter.project_name }} docs, in docstrings, or even on the web in blog posts,
+Stan could always use more documentation, whether as part of the 
+official Stan docs, in docstrings, or even on the web in blog posts,
 articles, and such.
 
 Submit Feedback
