@@ -1,2 +1,0 @@
-pandas==0.13.0
-pyparsing==2.0.1

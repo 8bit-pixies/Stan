@@ -1,0 +1,171 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>data Package &mdash; Stan 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Stan 0.0.1 documentation" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">Stan 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">data Package</a><ul>
+<li><a class="reference internal" href="#module-stan.data.data_expr"><tt class="docutils literal"><span class="pre">data_expr</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-stan.data.data_lex"><tt class="docutils literal"><span class="pre">data_lex</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-stan.data.data_parse"><tt class="docutils literal"><span class="pre">data_parse</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/api/stan.data.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="data-package">
+<h1>data Package<a class="headerlink" href="#data-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-stan.data.data_expr">
+<span id="data-expr-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">data_expr</span></tt> Module<a class="headerlink" href="#module-stan.data.data_expr" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="#module-stan.data.data_expr" title="stan.data.data_expr"><tt class="xref py py-mod docutils literal"><span class="pre">stan.data.data_expr</span></tt></a> module is the grammar for SAS-like language.</p>
+</div>
+<div class="section" id="module-stan.data.data_lex">
+<span id="data-lex-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">data_lex</span></tt> Module<a class="headerlink" href="#module-stan.data.data_lex" title="Permalink to this headline">¶</a></h2>
+<p>The <tt class="xref py py-mod docutils literal"><span class="pre">stan.data_lex</span></tt> module is the lexer for SAS-like language.</p>
+</div>
+<div class="section" id="module-stan.data.data_parse">
+<span id="data-parse-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">data_parse</span></tt> Module<a class="headerlink" href="#module-stan.data.data_parse" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="#module-stan.data.data_parse" title="stan.data.data_parse"><tt class="xref py py-mod docutils literal"><span class="pre">stan.data.data_parse</span></tt></a> module is the data step parser for SAS-like language.</p>
+<dl class="function">
+<dt id="stan.data.data_parse.data_convert">
+<tt class="descclassname">stan.data.data_parse.</tt><tt class="descname">data_convert</tt><big>(</big><em>v_ls</em>, <em>data</em><big>)</big><a class="reference internal" href="../_modules/stan/data/data_parse.html#data_convert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stan.data.data_parse.data_convert" title="Permalink to this definition">¶</a></dt>
+<dd><p>data convert converts the data options to Pandas format. Returns a converted string.</p>
+<p>v_ls : list of tokens
+data : the source Pandas DataFrame</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stan.data.data_parse.data_parse">
+<tt class="descclassname">stan.data.data_parse.</tt><tt class="descname">data_parse</tt><big>(</big><em>cstr</em><big>)</big><a class="reference internal" href="../_modules/stan/data/data_parse.html#data_parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stan.data.data_parse.data_parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>data_parse parses the string and returns a Pandas compatible string</p>
+<p>cstr : string written in SAS-like language</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stan.data.data_parse.id_convert">
+<tt class="descclassname">stan.data.data_parse.</tt><tt class="descname">id_convert</tt><big>(</big><em>v_ls</em>, <em>data</em><big>)</big><a class="reference internal" href="../_modules/stan/data/data_parse.html#id_convert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stan.data.data_parse.id_convert" title="Permalink to this definition">¶</a></dt>
+<dd><p>id convert changes variable ids to the Pandas format. Returns a converted string</p>
+<p>It iterates through list of tokens checking whether it is a reserved keyword
+or not.</p>
+<p>v_ls : list of tokens
+data : the source Pandas DataFrame</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stan.data.data_parse.logic_convert">
+<tt class="descclassname">stan.data.data_parse.</tt><tt class="descname">logic_convert</tt><big>(</big><em>v_ls</em>, <em>data</em><big>)</big><a class="reference internal" href="../_modules/stan/data/data_parse.html#logic_convert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stan.data.data_parse.logic_convert" title="Permalink to this definition">¶</a></dt>
+<dd><p>logic convert changes control flow statements to the Pandas format. Returns a converted string</p>
+<p>It attempts to parse the conditions and results to a lambda function, using the ternary operator in python</p>
+<p>For example:</p>
+<div class="highlight-sas"><pre>if b &lt; 0 then "neg"
+else if b &gt; 0 then "pos"
+else "zero"</pre>
+</div>
+<p>Would be equivalent to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&quot;neg&quot;</span> <span class="k">if</span> <span class="n">b</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s">&quot;pos&quot;</span> <span class="k">if</span> <span class="n">b</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s">&quot;zero&quot;</span>
+</pre></div>
+</div>
+<p>v_ls : list of tokens
+data : the source Pandas DataFrame</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stan.data.data_parse.set_convert">
+<tt class="descclassname">stan.data.data_parse.</tt><tt class="descname">set_convert</tt><big>(</big><em>v_ls</em>, <em>data</em><big>)</big><a class="reference internal" href="../_modules/stan/data/data_parse.html#set_convert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stan.data.data_parse.set_convert" title="Permalink to this definition">¶</a></dt>
+<dd><p>set convert converts the set options to Pandas format. Returns a converted string.</p>
+<p>v_ls : list of tokens
+data : the source Pandas DataFrame</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">Stan 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright Stan.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,243 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>stan.data.data_parse &mdash; Stan 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="Stan 0.0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">Stan 0.0.1 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for stan.data.data_parse</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The :mod:`stan.data.data_parse` module is the data step parser for SAS-like language.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">stan.data.data_lex</span> <span class="kn">import</span> <span class="n">dataStepStmt</span>
+<span class="kn">from</span> <span class="nn">stan.data.data_expr</span> <span class="kn">import</span> <span class="n">RESERVED_KEYWORDS</span>
+
+<div class="viewcode-block" id="id_convert"><a class="viewcode-back" href="../../../api/stan.data.html#stan.data.data_parse.id_convert">[docs]</a><span class="k">def</span> <span class="nf">id_convert</span><span class="p">(</span><span class="n">v_ls</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;id convert changes variable ids to the Pandas format. Returns a converted string</span>
+<span class="sd">    </span>
+<span class="sd">    It iterates through list of tokens checking whether it is a reserved keyword</span>
+<span class="sd">    or not.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    </span>
+<span class="sd">    v_ls : list of tokens</span>
+<span class="sd">    data : the source Pandas DataFrame</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">var_stmt</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="n">v_ls</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span> 
+            <span class="k">if</span> <span class="n">el</span><span class="o">.</span><span class="n">id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">RESERVED_KEYWORDS</span><span class="p">:</span>
+                <span class="n">var_stmt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">el</span><span class="o">.</span><span class="n">id</span><span class="p">))</span> <span class="c">#if the expr is an identifier</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">var_stmt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">el</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">var_stmt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">el</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">var_stmt</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="logic_convert"><a class="viewcode-back" href="../../../api/stan.data.html#stan.data.data_parse.logic_convert">[docs]</a><span class="k">def</span> <span class="nf">logic_convert</span><span class="p">(</span><span class="n">v_ls</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;logic convert changes control flow statements to the Pandas format. Returns a converted string</span>
+<span class="sd">    </span>
+<span class="sd">    It attempts to parse the conditions and results to a lambda function, using the ternary operator in python</span>
+<span class="sd">    </span>
+<span class="sd">    For example:</span>
+
+<span class="sd">    .. code-block:: sas</span>
+<span class="sd">       </span>
+<span class="sd">       if b &lt; 0 then &quot;neg&quot;</span>
+<span class="sd">       else if b &gt; 0 then &quot;pos&quot;</span>
+<span class="sd">       else &quot;zero&quot;</span>
+<span class="sd">    </span>
+<span class="sd">    Would be equivalent to:</span>
+<span class="sd">    </span>
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">    </span>
+<span class="sd">       &quot;neg&quot; if b &lt; 0 else &quot;pos&quot; if b &gt; 0 else &quot;zero&quot;</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    </span>
+<span class="sd">    v_ls : list of tokens</span>
+<span class="sd">    data : the source Pandas DataFrame</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="s">&#39;l_result&#39;</span> <span class="ow">in</span> <span class="n">v_ls</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> <span class="s">&#39;l_cond&#39;</span> <span class="ow">in</span> <span class="n">v_ls</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">lmd</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s"> &#39;</span> <span class="o">%</span> <span class="n">id_convert</span><span class="p">(</span><span class="n">v_ls</span><span class="o">.</span><span class="n">l_result</span><span class="p">,</span> <span class="s">&#39;x&#39;</span><span class="p">)</span>
+        <span class="n">lmd</span> <span class="o">+=</span> <span class="s">&#39;if </span><span class="si">%s</span><span class="s"> &#39;</span> <span class="o">%</span> <span class="n">id_convert</span><span class="p">(</span><span class="n">v_ls</span><span class="o">.</span><span class="n">l_cond</span><span class="p">,</span> <span class="s">&#39;x&#39;</span><span class="p">)</span>
+        <span class="n">lmd</span> <span class="o">+=</span> <span class="s">&#39;else </span><span class="si">%s</span><span class="s"> &#39;</span> <span class="o">%</span> <span class="n">id_convert</span><span class="p">(</span><span class="n">logic_convert</span><span class="p">(</span><span class="n">v_ls</span><span class="o">.</span><span class="n">r_cond</span><span class="p">,</span> <span class="s">&#39;x&#39;</span><span class="p">),</span> <span class="s">&#39;x&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">lmd</span> <span class="o">=</span> <span class="n">id_convert</span><span class="p">(</span><span class="n">v_ls</span><span class="p">,</span> <span class="s">&#39;x&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">lmd</span>
+</div>
+<div class="viewcode-block" id="set_convert"><a class="viewcode-back" href="../../../api/stan.data.html#stan.data.data_parse.set_convert">[docs]</a><span class="k">def</span> <span class="nf">set_convert</span><span class="p">(</span><span class="n">v_ls</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;set convert converts the set options to Pandas format. Returns a converted string.</span>
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    </span>
+<span class="sd">    v_ls : list of tokens</span>
+<span class="sd">    data : the source Pandas DataFrame</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c"># check all the keys...</span>
+    <span class="n">ss</span> <span class="o">=</span> <span class="n">v_ls</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">v_ls</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&#39;rename&#39;</span><span class="p">:</span>
+            <span class="n">rename_ls</span> <span class="o">=</span> <span class="s">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&quot;&#39;</span><span class="si">%s</span><span class="s">&#39;:&#39;</span><span class="si">%s</span><span class="s">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="ow">in</span> <span class="n">v_ls</span><span class="p">[</span><span class="s">&#39;rename&#39;</span><span class="p">]])</span>
+            <span class="n">ss</span> <span class="o">+=</span> <span class="s">&#39;.rename(columns={</span><span class="si">%s</span><span class="s">})&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">rename_ls</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&#39;drop&#39;</span><span class="p">:</span>
+            <span class="n">drop_ls</span> <span class="o">=</span> <span class="s">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&quot;&#39;</span><span class="si">%s</span><span class="s">&#39;&quot;</span> <span class="o">%</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">v_ls</span><span class="p">[</span><span class="s">&#39;drop&#39;</span><span class="p">]])</span>
+            <span class="n">ss</span> <span class="o">+=</span> <span class="s">&#39;.drop([</span><span class="si">%s</span><span class="s">],1)&#39;</span> <span class="o">%</span> <span class="n">drop_ls</span>
+    <span class="n">ss</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">=</span><span class="si">%s</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ss</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ss</span>
+</div>
+<div class="viewcode-block" id="data_convert"><a class="viewcode-back" href="../../../api/stan.data.html#stan.data.data_parse.data_convert">[docs]</a><span class="k">def</span> <span class="nf">data_convert</span><span class="p">(</span><span class="n">v_ls</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;data convert converts the data options to Pandas format. Returns a converted string.</span>
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    </span>
+<span class="sd">    v_ls : list of tokens</span>
+<span class="sd">    data : the source Pandas DataFrame</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">datas</span> <span class="o">=</span> <span class="n">data</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">v_ls</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&#39;rename&#39;</span><span class="p">:</span>
+            <span class="n">rename_ls</span> <span class="o">=</span> <span class="s">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&quot;&#39;</span><span class="si">%s</span><span class="s">&#39;:&#39;</span><span class="si">%s</span><span class="s">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="ow">in</span> <span class="n">v_ls</span><span class="p">[</span><span class="s">&#39;rename&#39;</span><span class="p">]])</span>
+            <span class="n">datas</span> <span class="o">+=</span> <span class="s">&#39;.rename(columns={</span><span class="si">%s</span><span class="s">})&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">rename_ls</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&#39;drop&#39;</span><span class="p">:</span>
+            <span class="n">drop_ls</span> <span class="o">=</span> <span class="s">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&quot;&#39;</span><span class="si">%s</span><span class="s">&#39;&quot;</span> <span class="o">%</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">v_ls</span><span class="p">[</span><span class="s">&#39;drop&#39;</span><span class="p">]])</span>
+            <span class="n">datas</span> <span class="o">+=</span> <span class="s">&#39;.drop([</span><span class="si">%s</span><span class="s">],1)&#39;</span> <span class="o">%</span> <span class="n">drop_ls</span>
+    <span class="k">return</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">=</span><span class="si">%s</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">datas</span><span class="p">)</span> <span class="k">if</span> <span class="n">data</span> <span class="o">!=</span> <span class="n">datas</span> <span class="k">else</span> <span class="s">&quot;&quot;</span>
+           </div>
+<div class="viewcode-block" id="data_parse"><a class="viewcode-back" href="../../../api/stan.data.html#stan.data.data_parse.data_parse">[docs]</a><span class="k">def</span> <span class="nf">data_parse</span><span class="p">(</span><span class="n">cstr</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;data_parse parses the string and returns a Pandas compatible string</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    </span>
+<span class="sd">    cstr : string written in SAS-like language</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">inf</span> <span class="o">=</span> <span class="n">dataStepStmt</span><span class="o">.</span><span class="n">parseString</span><span class="p">(</span><span class="n">cstr</span><span class="p">)</span>
+    <span class="n">bd</span> <span class="o">=</span> <span class="n">inf</span><span class="o">.</span><span class="n">asDict</span><span class="p">()</span>
+    
+    <span class="n">ss</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">bd</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">][</span><span class="s">&#39;name&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    
+    <span class="c"># looking through set options</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">bd</span><span class="p">[</span><span class="s">&#39;set&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> 
+        <span class="k">pass</span>
+    <span class="k">else</span><span class="p">:</span> 
+        <span class="n">set_str</span> <span class="o">=</span> <span class="n">set_convert</span><span class="p">(</span><span class="n">bd</span><span class="p">[</span><span class="s">&#39;set&#39;</span><span class="p">],</span> <span class="n">data</span><span class="p">)</span>
+        <span class="n">ss</span> <span class="o">=</span> <span class="n">set_str</span>
+
+    <span class="c"># check logic_stmt    </span>
+    <span class="k">if</span> <span class="s">&#39;stmt&#39;</span> <span class="ow">in</span> <span class="n">bd</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">stmt</span> <span class="ow">in</span> <span class="n">bd</span><span class="p">[</span><span class="s">&#39;stmt&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="s">&#39;logical&#39;</span> <span class="ow">in</span> <span class="n">stmt</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">lmd</span> <span class="o">=</span> <span class="n">logic_convert</span><span class="p">(</span><span class="n">stmt</span><span class="o">.</span><span class="n">logical</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+                <span class="n">ss</span> <span class="o">+=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">[&#39;</span><span class="si">%s</span><span class="s">&#39;]=</span><span class="si">%s</span><span class="s">.apply(lambda x : </span><span class="si">%s</span><span class="s">, axis=1)</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">stmt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">,</span> <span class="n">lmd</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="s">&#39;fcall&#39;</span> <span class="ow">in</span> <span class="n">stmt</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">var_stmt</span> <span class="o">=</span> <span class="n">id_convert</span><span class="p">(</span><span class="n">stmt</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="s">&#39;x&#39;</span><span class="p">)</span>
+                <span class="n">ss</span> <span class="o">+=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">[&#39;</span><span class="si">%s</span><span class="s">&#39;]=</span><span class="si">%s</span><span class="s">.apply(lambda x: </span><span class="si">%s</span><span class="s">, axis=1)</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">stmt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">,</span> <span class="n">var_stmt</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">var_stmt</span> <span class="o">=</span> <span class="n">id_convert</span><span class="p">(</span><span class="n">stmt</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">data</span><span class="p">)</span>
+                <span class="n">ss</span> <span class="o">+=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">[&#39;</span><span class="si">%s</span><span class="s">&#39;]=</span><span class="si">%s</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">stmt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">var_stmt</span><span class="p">)</span>
+    
+    <span class="c"># check data options</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">bd</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> 
+        <span class="k">pass</span>
+    <span class="k">else</span><span class="p">:</span> 
+        <span class="n">datas</span> <span class="o">=</span> <span class="n">data_convert</span><span class="p">(</span><span class="n">bd</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">],</span> <span class="n">data</span><span class="p">)</span>
+        <span class="n">ss</span> <span class="o">+=</span> <span class="n">datas</span>
+    <span class="k">return</span> <span class="n">ss</span>
+</pre></div></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">Stan 0.0.1 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright Stan.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
