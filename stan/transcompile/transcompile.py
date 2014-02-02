@@ -34,7 +34,7 @@ def transcompile(cstr):
     cstr = multi_comments.sub(r' ', cstr)
     cstr = single_c_comments.sub(r' ', cstr)
     cstr = single_sas_comments.sub(r' ', cstr)    
-    cstr = pycode.sub(r' ', cstr)    
+    cstr = pycode.sub(r'', cstr)    
     
     
     find_rule = re.compile(r'(((?:data)|(?:proc)).*?(?:run\s*;))', re.I | re.DOTALL)

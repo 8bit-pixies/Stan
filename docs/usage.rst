@@ -2,6 +2,6 @@
 Usage
 ========
 
-To use {{ cookiecutter.project_name }} in a project::
+To use stan in a project::
 
-	import {{ cookiecutter.repo_name }}
+	import stan

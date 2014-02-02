@@ -1,11 +1,9 @@
 Statistical Analysis System Transcompiler to SciPy
 ==================================================
 
+.. image:: https://travis-ci.org/chappers/Stan.png?branch=dev   :target: https://travis-ci.org/chappers/Stan
+
 The goal of this is to transcompile a subset of SAS/Base to SciPy.
-
-Feature Set
------------
-
 
 Testing
 -------
@@ -31,5 +29,5 @@ Known Issues
 Will not Suport
 ---------------
 
-* ``macro`` facility (nice to have); You could just write pure python code for it? (python functions)
+* ``macro`` facility. It can be replicated (to a degree) using `iPython <http://ipython.org/ipython-doc/rel-1.1.0/interactive/reference.html#input-caching-system>`_.
 
