@@ -2,9 +2,12 @@
 The :mod:`stan.proc.proc_parse` module is the proc parser for SAS-like language.
 """
 
+import re
+import pkgutil
+
 from stan.proc.proc_expr import RESERVED_KEYWORDS, PROC_
 import stan.proc_functions as proc_func
-import pkgutil
+from stan.proc.proc_sql import proc_sql
 
 def proc_parse(cstr):
     """proc parse converts procedure statements to python function equivalents
@@ -20,6 +23,12 @@ def proc_parse(cstr):
     ``data`` and ``output``/``out`` are protected variables.    
     If you wish to use a DataFrame as an argument, prepend ``dt_`` for the parser to interpret this correctly
     """
+    
+    # if cstr is in the form "proc sql" we won't pass tokens
+    
+    if re.match(r"^\s*proc\s*sql", cstr.strip(), re.IGNORECASE):
+        return proc_sql(cstr.strip())    
+    
     v_ls = PROC_.parseString(cstr)
     
     sls = []

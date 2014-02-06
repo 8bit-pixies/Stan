@@ -16,7 +16,7 @@ cstr = """proc describe data = df1 out = df2;
 cstr1 = """proc describe data = df1 out = df2;
     by a;
     fin = "/usr/test.text";
-run;"""
+quit;"""
 
 class TestDesc(unittest.TestCase):
     def test_dataset_opt(self):

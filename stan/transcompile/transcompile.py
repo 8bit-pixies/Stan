@@ -37,7 +37,7 @@ def transcompile(cstr):
     cstr = pycode.sub(r'', cstr)    
     
     
-    find_rule = re.compile(r'(((?:data)|(?:proc)).*?(?:run\s*;))', re.I | re.DOTALL)
+    find_rule = re.compile(r'(((?:data)|(?:proc)).*?(?:(?:run|quit)\s*;))', re.I | re.DOTALL)
     
     def replace_in_script(f_array):
         if f_array.group(2).lower() == 'data':
