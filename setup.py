@@ -22,6 +22,6 @@ setup(
 
     classifiers      = [],
 
-    install_requires = ['pyparsing', 'pandas']
+    install_requires = ['pyparsing', 'pandas', 'pandasql']
 )
 
