@@ -3,7 +3,7 @@ The :mod:`stan.data_lex` module is the lexer for SAS-like language.
 """
 
 from pyparsing import *
-from stan.data.data_expr import EXPR_, ID_, DATA, SET, RENAME, RUN, DROP, KEEP, SEMI_, LOGICAL_
+from stan.data.data_expr import EXPR_, ID_, DATA, SET, RENAME, RUN, DROP, KEEP, SEMI_, LOGICAL_, SASLOGICAL_
     
 # set up logic
 dataStepStmt = Forward()
@@ -38,6 +38,7 @@ set_stmt = Group(Suppress(SET) + ID_.setResultsName('name') + dataset_opt_stmt.s
 dataStepStmt << (data_stmt + 
                  set_stmt + 
                  (ZeroOrMore(opt_stmt) &
-                 ZeroOrMore(s_stmt).setResultsName('stmt')) + 
+                 ZeroOrMore(s_stmt).setResultsName('stmt') & 
+                 ZeroOrMore(SASLOGICAL_.setResultsName('saslogical') + SEMI_)) + 
                  RUN + SEMI_)
 

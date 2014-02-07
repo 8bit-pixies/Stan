@@ -139,6 +139,9 @@ def data_parse(cstr):
             else:
                 var_stmt = id_convert(stmt[1:], data)
                 ss += "%s['%s']=%s\n" % (data, stmt[0], var_stmt)
+                
+    if 'saslogical' in bd.keys():
+        pass
     
     # check data options
     if len(bd['data'].keys()) == 0: 
