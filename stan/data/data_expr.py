@@ -44,16 +44,17 @@ atom = (FCALL_.setResultsName('fcall') | pi | NUM_ | STR_ | Group(ID_.setResults
 
 term = Forward()
 term = atom + ZeroOrMore(( multop + EXPR_ ))
-log = term + ZeroOrMore(( addop + EXPR_ ))
-EXPR_ << log + ZeroOrMore(( logic + EXPR_ ))
+EXPR_ << term + ZeroOrMore(( addop + EXPR_ ))
+#
 
 # the logical statement may need to be changed in the future to support the way sas handles it, particularly the "if then do end" pattern
-
 # SAS Logical specific expressions
+
+SEXPR_ = EXPR_ + ZeroOrMore(( logic + EXPR_ ))
 
 DOEXPR = (ID_ + Suppress("=") + EXPR_ + SEMI_) | (DO + SEMI_ + OneOrMore(ID_ + Suppress("=") + EXPR_ + SEMI_) + END + SEMI_)
 
 SASLOGICAL_ = Forward()
-SASLOGICAL_ << IF + Group(EXPR_).setResultsName('l_cond') + THEN + DOEXPR  + Group(Optional(ELSE.suppress() + (LOGICAL_ | DOEXPR))).setResultsName('r_cond')
+SASLOGICAL_ << IF + Group(SEXPR_).setResultsName('l_cond') + THEN + DOEXPR  + Group(Optional(ELSE.suppress() + (SASLOGICAL_ | DOEXPR))).setResultsName('r_cond')
 
 

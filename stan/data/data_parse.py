@@ -5,7 +5,7 @@ The :mod:`stan.data.data_parse` module is the data step parser for SAS-like lang
 from stan.data.data_lex import dataStepStmt
 from stan.data.data_expr import RESERVED_KEYWORDS
 
-def id_convert(v_ls, data):
+def _id_convert(v_ls, data):
     """id convert changes variable ids to the Pandas format. Returns a converted string
     
     It iterates through list of tokens checking whether it is a reserved keyword
@@ -29,41 +29,7 @@ def id_convert(v_ls, data):
             var_stmt.append(el)
     return ''.join(var_stmt)
 
-def logic_convert(v_ls, data):
-    """logic convert changes control flow statements to the Pandas format. Returns a converted string
-    
-    It attempts to parse the conditions and results to a lambda function, using the ternary operator in python
-    
-    For example:
-
-    .. code-block:: sas
-       
-       if b < 0 then "neg"
-       else if b > 0 then "pos"
-       else "zero"
-    
-    Would be equivalent to:
-    
-    .. code-block:: python
-    
-       "neg" if b < 0 else "pos" if b > 0 else "zero"
-    
-    Parameters
-    ----------
-    
-    v_ls : list of tokens
-    data : the source Pandas DataFrame
-    
-    """
-    if 'l_result' in v_ls.keys() and 'l_cond' in v_ls.keys():
-        lmd = '%s ' % id_convert(v_ls.l_result, 'x')
-        lmd += 'if %s ' % id_convert(v_ls.l_cond, 'x')
-        lmd += 'else %s ' % id_convert(logic_convert(v_ls.r_cond, 'x'), 'x')
-    else:
-        lmd = id_convert(v_ls, 'x')
-    return lmd
-
-def set_convert(v_ls, data):
+def _set_convert(v_ls, data):
     """set convert converts the set options to Pandas format. Returns a converted string.
         
     Parameters
@@ -85,7 +51,7 @@ def set_convert(v_ls, data):
     ss = "%s=%s\n" % (data, ss)
     return ss
 
-def data_convert(v_ls, data):
+def _data_convert(v_ls, data):
     """data convert converts the data options to Pandas format. Returns a converted string.
         
     Parameters
@@ -124,20 +90,17 @@ def data_parse(cstr):
     if len(bd['set'].keys()) == 0: 
         pass
     else: 
-        set_str = set_convert(bd['set'], data)
+        set_str = _set_convert(bd['set'], data)
         ss = set_str
 
     # check logic_stmt    
     if 'stmt' in bd.keys():
         for stmt in bd['stmt']:
-            if 'logical' in stmt.keys():
-                lmd = logic_convert(stmt.logical, data)
-                ss += "%s['%s']=%s.apply(lambda x : %s, axis=1)\n" % (data, stmt[0], data, lmd)
-            elif 'fcall' in stmt.keys():
-                var_stmt = id_convert(stmt[1:], 'x')
+            if 'fcall' in stmt.keys():
+                var_stmt = _id_convert(stmt[1:], 'x')
                 ss += "%s['%s']=%s.apply(lambda x: %s, axis=1)\n" % (data, stmt[0], data, var_stmt)
             else:
-                var_stmt = id_convert(stmt[1:], data)
+                var_stmt = _id_convert(stmt[1:], data)
                 ss += "%s['%s']=%s\n" % (data, stmt[0], var_stmt)
                 
     if 'saslogical' in bd.keys():
@@ -147,7 +110,7 @@ def data_parse(cstr):
     if len(bd['data'].keys()) == 0: 
         pass
     else: 
-        datas = data_convert(bd['data'], data)
+        datas = _data_convert(bd['data'], data)
         ss += datas
     return ss
 

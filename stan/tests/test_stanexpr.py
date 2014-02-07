@@ -20,6 +20,24 @@ class TestMatch(unittest.TestCase):
             result = stan_e.EXPR_.parseString(data)
             self.assertEqual(result.asList(), ans)
 
+class TestSASLogical(unittest.TestCase):
+    ss = """if a = 1 then a = 2;"""
+    sd = """if a = 1 then do;
+    b = 1;
+    c = 2;
+    end;
+    else if a = 2 then do;
+    b =2;
+    end;
+    else c = 1;
+    """
+    
+    def test_exprTest(self):
+        #self.assertTrue(stan_e.SASLOGICAL_.parseString(self.ss) != '')
+        #self.assertEqual(stan_e.SASLOGICAL_.parseString(self.ss), '')
+        #self.assertEqual(stan_e.SASLOGICAL_.parseString(self.sd), '')
+        None
+            
 if __name__ == '__main__':
     unittest.main()
 
