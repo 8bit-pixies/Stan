@@ -31,8 +31,9 @@ g = -1;
 c = 1+2;
 d = b+c;
 na = substr(t,1,1) + "a";
-halfyr = if month < (6*180) then 1 else if month > (6*180) then 2 else 0;
 run;"""
+
+# removed the if statement for now
 
 
 def substr(ss, start, length):
