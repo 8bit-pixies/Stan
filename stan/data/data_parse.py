@@ -198,24 +198,3 @@ def data_parse(cstr):
         ss += _data_convert(bd['data'], data)
     return ss
 
-
-
-q = """
-data df_if;
-    set df;
-    c = 2;
-    d = 3;
-
-    if b < 0.3 then x = 0;
-    else if b < 0.6 then x = 1;
-    else x = 2;
-
-    if c = 1 then a = 1;
-
-    d = 1;
-run;
-"""
-
-#b = dataStepStmt.parseString(q).asDict()
-a = dataStepStmt.parseString(q)
-print data_parse(q)
