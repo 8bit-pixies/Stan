@@ -51,6 +51,88 @@ def _set_convert(v_ls, data):
     ss = "%s=%s\n" % (data, ss)
     return ss
 
+def _logic_id_convert(v_ls, data, cond = ''):
+    """id convert changes variable ids to the Pandas format. Returns a converted string
+    
+    It iterates through list of tokens checking whether it is a reserved keyword
+    or not.
+    
+    Parameters
+    ----------
+    
+    v_ls : list of tokens
+    data : the source Pandas DataFrame
+    cond : the condition to be applied if applicable
+    
+    """
+    var_stmt = []
+    for el in v_ls:
+        try: 
+            if el.id not in RESERVED_KEYWORDS:
+                if cond != '':
+                    var_stmt.append("%s.ix[(%s),'%s']" % (data, cond, el.id[0])) #if the expr is an identifier
+                else:
+                    var_stmt.append("%s%s" % (data, el.id)) #if the expr is an identifier
+            else:
+                var_stmt.append(el)
+        except:
+            if el == '=' : el = '=='
+            var_stmt.append(el)
+    return ''.join(var_stmt)
+    
+def _logic(v_ls, data, cond_list = []):
+    """_logic converts tokens into pandas if statement
+    
+    It works through using np.where.
+    
+    Parameters
+    ----------
+    
+    v_ls : list of tokens
+    data : the source Pandas DataFrame
+    cond_list : list of conditions
+    
+    """
+    ss = ''
+    if 'l_cond' in v_ls.keys():
+        # df.ix[(df['a']%2 ==0), 'a'] = df[(df['a']%2 ==0)]['a'] + 1 
+        cond = _logic_id_convert(v_ls['l_cond'], data)
+        cond_list.append(cond)
+        cond_list = list(set(cond_list))
+        
+    if 'assign' in v_ls.keys():
+        cond_ = " and ".join(["not(%s)" % x for x in cond_list if x != cond and x != '']+[cond])
+        if 'singleExpr' in v_ls['assign'].keys():
+            stmt = v_ls['assign']                  
+            var_stmt = _logic_id_convert(stmt[1:], data, cond=cond_)
+            ss += "%s.ix[(%s), '%s'] = %s\n" % (data, cond_, stmt[0], var_stmt)
+            #ss = "    %s.loc[i,'%s']=%s\n" % (data, stmt[0], var_stmt)
+        else:
+            for stmt in v_ls['assign']:
+                var_stmt = _logic_id_convert(stmt[1:], data, cond = cond_)
+                ss += "%s.ix[(%s), '%s'] = %s\n" % (data, cond_, stmt[0], var_stmt)
+        
+    if 'r_cond' in v_ls.keys() and len(v_ls['r_cond']) != 0:
+        cond_ = " and ".join(["not(%s)" % x for x in cond_list])
+        if 'l_cond' in v_ls['r_cond'].keys():
+            ss += _logic(v_ls['r_cond'], data, cond_list)
+        elif 'assign' in v_ls['r_cond'].keys():
+            if 'singleExpr' in v_ls['r_cond']['assign'].keys():
+                stmt = v_ls['r_cond']['assign']                  
+                var_stmt = _logic_id_convert(stmt[1:], data, cond=cond_)
+                ss += "%s.ix[(%s), '%s'] = %s\n" % (data, cond_, stmt[0], var_stmt)
+            else:
+                for stmt in v_ls['r_cond']['assign']:
+                    var_stmt = _logic_id_convert(stmt[1:], data, cond = cond_)
+                    ss += "%s.ix[(%s), '%s'] = %s\n" % (data, cond_, stmt[0], var_stmt)
+        
+        else:
+            if 'singleExpr' in v_ls['r_cond'].keys():
+                var_stmt = _logic_id_convert(v_ls['r_cond'][1:], data, cond=cond_)
+                ss += "%s.ix[(%s), '%s'] = %s\n" % (data, cond_, v_ls['r_cond'][0], var_stmt)
+                
+    return ss
+    
 def _data_convert(v_ls, data):
     """data convert converts the data options to Pandas format. Returns a converted string.
         
@@ -93,25 +175,47 @@ def data_parse(cstr):
         set_str = _set_convert(bd['set'], data)
         ss = set_str
 
-    # check logic_stmt    
-    if 'stmt' in bd.keys():
-        for stmt in bd['stmt']:
-            if 'fcall' in stmt.keys():
-                var_stmt = _id_convert(stmt[1:], 'x')
-                ss += "%s['%s']=%s.apply(lambda x: %s, axis=1)\n" % (data, stmt[0], data, var_stmt)
-            else:
-                var_stmt = _id_convert(stmt[1:], data)
-                ss += "%s['%s']=%s\n" % (data, stmt[0], var_stmt)
-                
-    if 'saslogical' in bd.keys():
-        pass
+    # check all stmts   
+    if 'stmt_groups' in bd.keys():
+        for g_stmt in bd['stmt_groups']:
+            if 'stmt' in g_stmt.keys():
+                for stmt in g_stmt:
+                    if 'fcall' in stmt.keys():
+                        var_stmt = _id_convert(stmt[1:], 'x')
+                        ss += "%s['%s']=%s.apply(lambda x: %s, axis=1)\n" % (data, stmt[0], data, var_stmt)
+                    else:
+                        var_stmt = _id_convert(stmt[1:], data)
+                        ss += "%s['%s']=%s\n" % (data, stmt[0], var_stmt)
+                        
+            if 'saslogical' in g_stmt.keys():
+                for stmt in g_stmt['saslogical']:
+                    ss += _logic(stmt, data)
     
     # check data options
     if len(bd['data'].keys()) == 0: 
         pass
     else: 
-        datas = _data_convert(bd['data'], data)
-        ss += datas
+        ss += _data_convert(bd['data'], data)
     return ss
 
 
+
+q = """
+data df_if;
+    set df;
+    c = 2;
+    d = 3;
+
+    if b < 0.3 then x = 0;
+    else if b < 0.6 then x = 1;
+    else x = 2;
+
+    if c = 1 then a = 1;
+
+    d = 1;
+run;
+"""
+
+#b = dataStepStmt.parseString(q).asDict()
+a = dataStepStmt.parseString(q)
+print data_parse(q)

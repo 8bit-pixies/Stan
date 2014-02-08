@@ -6,7 +6,6 @@ from pyparsing import *
 from stan.data.data_expr import EXPR_, ID_, DATA, SET, RENAME, RUN, DROP, KEEP, SEMI_, SASLOGICAL_
     
 # set up logic
-dataStepStmt = Forward()
 
 # data/set inline options
 rename_stmt = (OneOrMore(Group(ID_ + Suppress("=") + 
@@ -35,10 +34,9 @@ s_stmt = Group(ID_ + Suppress("=") + EXPR_ + SEMI_)
 data_stmt = Group(Suppress(DATA) + ID_.setResultsName('name') + dataset_opt_stmt.setResultsName('data opt')).setResultsName('data') + SEMI_
 set_stmt = Group(Suppress(SET) + ID_.setResultsName('name') + dataset_opt_stmt.setResultsName('set opt')).setResultsName('set') + SEMI_
 
+dataStepStmt = Forward()
 dataStepStmt << (data_stmt + 
                  set_stmt + 
-                 (ZeroOrMore(opt_stmt) &
-                 ZeroOrMore(s_stmt).setResultsName('stmt') & 
-                 ZeroOrMore(SASLOGICAL_.setResultsName('saslogical') + SEMI_)) + 
+                 ZeroOrMore(Group((opt_stmt).setResultsName('opt') | (s_stmt).setResultsName('stmt') | (SASLOGICAL_).setResultsName('saslogical'))).setResultsName('stmt_groups') + 
                  RUN + SEMI_)
 
