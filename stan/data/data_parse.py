@@ -78,7 +78,7 @@ def _logic_id_convert(v_ls, data, cond = ''):
         except:
             if el == '=' : el = '=='
             var_stmt.append(el)
-    return ''.join(var_stmt)
+    return "(%s)" % ''.join(var_stmt)
     
 def _logic(v_ls, data, cond_list = []):
     """_logic converts tokens into pandas if statement
@@ -101,7 +101,7 @@ def _logic(v_ls, data, cond_list = []):
         cond_list = list(set(cond_list))
         
     if 'assign' in v_ls.keys():
-        cond_ = " and ".join(["not(%s)" % x for x in cond_list if x != cond and x != '']+[cond])
+        cond_ = " & ".join(["(~(%s))" % x for x in cond_list if x != cond and x != '']+[cond])
         if 'singleExpr' in v_ls['assign'].keys():
             stmt = v_ls['assign']                  
             var_stmt = _logic_id_convert(stmt[1:], data, cond=cond_)
@@ -113,23 +113,24 @@ def _logic(v_ls, data, cond_list = []):
                 ss += "%s.ix[(%s), '%s'] = %s\n" % (data, cond_, stmt[0], var_stmt)
         
     if 'r_cond' in v_ls.keys() and len(v_ls['r_cond']) != 0:
-        cond_ = " and ".join(["not(%s)" % x for x in cond_list])
-        if 'l_cond' in v_ls['r_cond'].keys():
-            ss += _logic(v_ls['r_cond'], data, cond_list)
-        elif 'assign' in v_ls['r_cond'].keys():
-            if 'singleExpr' in v_ls['r_cond']['assign'].keys():
-                stmt = v_ls['r_cond']['assign']                  
-                var_stmt = _logic_id_convert(stmt[1:], data, cond=cond_)
-                ss += "%s.ix[(%s), '%s'] = %s\n" % (data, cond_, stmt[0], var_stmt)
-            else:
-                for stmt in v_ls['r_cond']['assign']:
-                    var_stmt = _logic_id_convert(stmt[1:], data, cond = cond_)
+        cond_ = " & ".join(["(~(%s))" % x for x in cond_list])
+        for stmt in v_ls['r_cond']:
+            if 'l_cond' in stmt.keys():
+                ss += _logic(stmt, data, cond_list)
+            elif 'assign' in stmt.keys():
+                if 'singleExpr' in stmt['assign'].keys():
+                    stmt = stmt['assign']                  
+                    var_stmt = _logic_id_convert(stmt[1:], data, cond=cond_)
                     ss += "%s.ix[(%s), '%s'] = %s\n" % (data, cond_, stmt[0], var_stmt)
-        
-        else:
-            if 'singleExpr' in v_ls['r_cond'].keys():
-                var_stmt = _logic_id_convert(v_ls['r_cond'][1:], data, cond=cond_)
-                ss += "%s.ix[(%s), '%s'] = %s\n" % (data, cond_, v_ls['r_cond'][0], var_stmt)
+                else:
+                    for stmt in stmt['assign']:
+                        var_stmt = _logic_id_convert(stmt[1:], data, cond = cond_)
+                        ss += "%s.ix[(%s), '%s'] = %s\n" % (data, cond_, stmt[0], var_stmt)
+            
+            else:
+                if 'singleExpr' in stmt.keys():
+                    var_stmt = _logic_id_convert(stmt[1:], data, cond=cond_)
+                    ss += "%s.ix[(%s), '%s'] = %s\n" % (data, cond_, stmt[0], var_stmt)
                 
     return ss
     
@@ -188,8 +189,11 @@ def data_parse(cstr):
                         ss += "%s['%s']=%s\n" % (data, stmt[0], var_stmt)
                         
             if 'saslogical' in g_stmt.keys():
-                for stmt in g_stmt['saslogical']:
-                    ss += _logic(stmt, data)
+                if len(g_stmt['saslogical']) == 1:
+                    ss += _logic(g_stmt['saslogical'][0], data)
+                else:
+                    for stmt in g_stmt['saslogical']:                    
+                        ss += _logic(stmt, data)
     
     # check data options
     if len(bd['data'].keys()) == 0: 
