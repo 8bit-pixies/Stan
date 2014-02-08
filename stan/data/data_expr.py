@@ -58,20 +58,15 @@ SEXPR_ = EXPR_ + ZeroOrMore(( logic + EXPR_ ))
 DOEXPR = (ID_ + Suppress("=") + EXPR_ + SEMI_).setResultsName('singleExpr') | (Suppress(DO) + SEMI_ + OneOrMore(Group(ID_ + Suppress("=") + EXPR_) + SEMI_) + Suppress(END) + SEMI_)
 
 SASLOGICAL_ = Forward()
-SASLOGICAL_ << IF + Group(SEXPR_).setResultsName('l_cond') + THEN + Group(DOEXPR).setResultsName('assign')  + Group(Optional(ELSE.suppress() + (SASLOGICAL_ | DOEXPR))).setResultsName('r_cond')
+SASLOGICAL_ << IF + Group(SEXPR_).setResultsName('l_cond') + THEN + Group(DOEXPR).setResultsName('assign')  + Group(Optional(ELSE.suppress() + (SASLOGICAL_ | Group(DOEXPR).setResultsName('assign')))).setResultsName('r_cond')
 
 ss = """if a = 1 then a = 2+2;"""
 sd = """if a = 1 then do;
     b = 1;
     c = 2;
-    end;
-    else if a = 2 then do;
-    b =2;
-    end;
-    else c = 1;
     """
 
-def id_convert(v_ls, data):
+def id_convert(v_ls, data, cond = ''):
     """id convert changes variable ids to the Pandas format. Returns a converted string
     
     It iterates through list of tokens checking whether it is a reserved keyword
@@ -88,7 +83,10 @@ def id_convert(v_ls, data):
     for el in v_ls:
         try: 
             if el.id not in RESERVED_KEYWORDS:
-                var_stmt.append("%s%s" % (data, el.id)) #if the expr is an identifier
+                if cond != '':
+                    var_stmt.append("%s.ix[(%s),'%s']" % (data, cond, el.id[0])) #if the expr is an identifier
+                else:
+                    var_stmt.append("%s%s" % (data, el.id)) #if the expr is an identifier
             else:
                 var_stmt.append(el)
         except:
@@ -103,29 +101,80 @@ data = 'df'
 df = pd.DataFrame(np.arange(1,26).reshape(5,5), columns = list('abcde'))  
 df_a = np.where(df['a'] % 2 == 0)[0]
 
-sd = """if (a % 2) = 0 then do;
-a = 1;
-b = 2;
+sd = """if (a % 2) = 0 then 
+a = a+1; else b = a;
+"""
+
+sd1 = """if (a % 2) = 0 then do; 
+a = a+1; b= c+1;
+
+end;
+else do;
+a = a-1;
+b = b-1;
+end;
+"""
+
+sd2 = """if (a % 2) = 0 then do; 
+a = a+1; b= c+1;
+
+end;
+else if (a % 3) = 0 then c = 2;
+else do;
+a = a-1;
+b = b-1;
+end;
 """
 
 a = SASLOGICAL_.parseString(sd).asDict()
 ss = ''
-for el in a:
-    if el == 'l_cond':
-        print "np.where(%s)[0]" % id_convert(a['l_cond'], data)
-    elif el == 'assign':
-        if 'singleExpr' in a['assign'].keys():
-            stmt = a['assign']
-            var_stmt = id_convert(stmt[1:], data)
-            ss = "    %s['%s']=%s\n" % (data, stmt[0], var_stmt)
+
+def _logic(v_ls, data, cond_list = []):
+    ss = ''
+    for el in v_ls:
+        if el == 'l_cond':
+            # df.ix[(df['a']%2 ==0), 'a'] = df[(df['a']%2 ==0)]['a'] + 1 
+            cond = id_convert(v_ls['l_cond'], data)
+            cond_list.append(cond)
+            cond_list = list(set(cond_list))
+        elif el == 'assign':
+            cond_ = " and ".join(["not(%s)" % x for x in cond_list if x != cond and x != '']+[cond])
+            if 'singleExpr' in v_ls['assign'].keys():
+                stmt = v_ls['assign']                  
+                var_stmt = id_convert(stmt[1:], data, cond=cond_)
+                ss += "%s.ix[(%s), '%s'] = %s\n" % (data, cond_, stmt[0], var_stmt)
+                #ss = "    %s.loc[i,'%s']=%s\n" % (data, stmt[0], var_stmt)
+            else:
+                for stmt in v_ls['assign']:
+                    var_stmt = id_convert(stmt[1:], data, cond = cond_)
+                    ss += "%s.ix[(%s), '%s'] = %s\n" % (data, cond_, stmt[0], var_stmt)
+        
+    if 'r_cond' in v_ls.keys() and len(v_ls['r_cond']) != 0:
+        cond_ = " and ".join(["not(%s)" % x for x in cond_list])
+        if 'l_cond' in v_ls['r_cond'].keys():
+            ss += _logic(v_ls['r_cond'], data, cond_list)
+            print "note:", _logic(v_ls['r_cond'], data, cond_list)
+            print "l_cond:", v_ls['r_cond']['l_cond']
+            print "\n---\n"
+        elif 'assign' in v_ls['r_cond'].keys():
+            if 'singleExpr' in v_ls['r_cond']['assign'].keys():
+                stmt = v_ls['r_cond']['assign']                  
+                var_stmt = id_convert(stmt[1:], data, cond=cond_)
+                ss += "%s.ix[(%s), '%s'] = %s\n" % (data, cond_, stmt[0], var_stmt)
+                #ss = "    %s.loc[i,'%s']=%s\n" % (data, stmt[0], var_stmt)
+            else:
+                for stmt in v_ls['r_cond']['assign']:
+                    var_stmt = id_convert(stmt[1:], data, cond = cond_)
+                    ss += "%s.ix[(%s), '%s'] = %s\n" % (data, cond_, stmt[0], var_stmt)
+        
         else:
-            for stmt in a['assign']:
-                var_stmt = id_convert(stmt[1:], data)
-                ss += "    %s['%s']=%s\n" % (data, stmt[0], var_stmt)
+            if 'singleExpr' in v_ls['r_cond'].keys():
+                var_stmt = id_convert(v_ls['r_cond'][1:], data, cond=cond_)
+                ss += "%s.ix[(%s), '%s'] = %s\n" % (data, cond_, v_ls['r_cond'][0], var_stmt)
+                
+    return ss
 
-cc =  """
-for i in np.where(%s)[0]:
-%s
-""" % (id_convert(a['l_cond'], 'x'), ss)
-
-
+cc = _logic(a, data)
+cc1 = _logic(SASLOGICAL_.parseString(sd1).asDict(), data)
+cc2 = _logic(SASLOGICAL_.parseString(sd2).asDict(), data)
+bb2 = SASLOGICAL_.parseString(sd2).asDict()
