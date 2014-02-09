@@ -94,6 +94,7 @@ def _logic(v_ls, data, cond_list = []):
     
     """
     ss = ''
+    var_list = []
     if 'l_cond' in v_ls.keys():
         # df.ix[(df['a']%2 ==0), 'a'] = df[(df['a']%2 ==0)]['a'] + 1 
         cond = _logic_id_convert(v_ls['l_cond'], data)
@@ -106,11 +107,13 @@ def _logic(v_ls, data, cond_list = []):
             stmt = v_ls['assign']                  
             var_stmt = _logic_id_convert(stmt[1:], data, cond=cond_)
             ss += "%s.ix[(%s), '%s'] = %s\n" % (data, cond_, stmt[0], var_stmt)
+            var_list.append(stmt[0])
             #ss = "    %s.loc[i,'%s']=%s\n" % (data, stmt[0], var_stmt)
         else:
             for stmt in v_ls['assign']:
                 var_stmt = _logic_id_convert(stmt[1:], data, cond = cond_)
                 ss += "%s.ix[(%s), '%s'] = %s\n" % (data, cond_, stmt[0], var_stmt)
+                var_list.append(stmt[0])
         
     if 'r_cond' in v_ls.keys() and len(v_ls['r_cond']) != 0:
         cond_ = " & ".join(["(~(%s))" % x for x in cond_list])
@@ -122,16 +125,24 @@ def _logic(v_ls, data, cond_list = []):
                     stmt = stmt['assign']                  
                     var_stmt = _logic_id_convert(stmt[1:], data, cond=cond_)
                     ss += "%s.ix[(%s), '%s'] = %s\n" % (data, cond_, stmt[0], var_stmt)
+                    var_list.append(stmt[0])
                 else:
                     for stmt in stmt['assign']:
                         var_stmt = _logic_id_convert(stmt[1:], data, cond = cond_)
                         ss += "%s.ix[(%s), '%s'] = %s\n" % (data, cond_, stmt[0], var_stmt)
+                        var_list.append(stmt[0])
             
             else:
                 if 'singleExpr' in stmt.keys():
                     var_stmt = _logic_id_convert(stmt[1:], data, cond=cond_)
                     ss += "%s.ix[(%s), '%s'] = %s\n" % (data, cond_, stmt[0], var_stmt)
-                
+                    var_list.append(stmt[0])
+    
+    v_ss = "["+','.join(["'"+x+"'" for x in list(set(var_list))])+"]"
+    ss = """for el in %s:
+    if el not in %s.columns:
+        %s[el] = np.nan
+""" % (v_ss, data, data) + ss        
     return ss
     
 def _data_convert(v_ls, data):
