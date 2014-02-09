@@ -13,8 +13,8 @@ setup(
     description      = 'Statistical Analysis System Transcompiler to Python',
     long_description = open("README.rst").read(),
 
-    author           = 'Chapman Siu',
-    author_email     = 'chapm0n.siu@gmail.com',
+    author           = 'Chapman Siu, David Qi, Matthew Seddon',
+    author_email     = 'chapm0n.siu@gmail.com, linendave@hotmail.com, mattseddon@hotmail.com',
     url              = 'https://github.com/chappers/Stan/',
     license          = 'MIT License',
 
