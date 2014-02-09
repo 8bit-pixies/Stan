@@ -1,4 +1,4 @@
-Statistical Analysis System Transcompiler to SciPy
+Statistical Analysis System (SAS) Transcompiler to SciPy
 ==================================================
 
 .. image:: https://travis-ci.org/chappers/Stan.png?branch=dev   :target: https://travis-ci.org/chappers/Stan
