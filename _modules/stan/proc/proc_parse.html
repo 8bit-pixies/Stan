@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -70,9 +68,12 @@
 <span class="sd">The :mod:`stan.proc.proc_parse` module is the proc parser for SAS-like language.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">pkgutil</span>
+
 <span class="kn">from</span> <span class="nn">stan.proc.proc_expr</span> <span class="kn">import</span> <span class="n">RESERVED_KEYWORDS</span><span class="p">,</span> <span class="n">PROC_</span>
 <span class="kn">import</span> <span class="nn">stan.proc_functions</span> <span class="kn">as</span> <span class="nn">proc_func</span>
-<span class="kn">import</span> <span class="nn">pkgutil</span>
+<span class="kn">from</span> <span class="nn">stan.proc.proc_sql</span> <span class="kn">import</span> <span class="n">proc_sql</span>
 
 <div class="viewcode-block" id="proc_parse"><a class="viewcode-back" href="../../../api/stan.proc.html#stan.proc.proc_parse.proc_parse">[docs]</a><span class="k">def</span> <span class="nf">proc_parse</span><span class="p">(</span><span class="n">cstr</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;proc parse converts procedure statements to python function equivalents</span>
@@ -88,6 +89,12 @@
 <span class="sd">    ``data`` and ``output``/``out`` are protected variables.    </span>
 <span class="sd">    If you wish to use a DataFrame as an argument, prepend ``dt_`` for the parser to interpret this correctly</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="c"># if cstr is in the form &quot;proc sql&quot; we won&#39;t pass tokens</span>
+    
+    <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s">r&quot;^\s*proc\s*sql&quot;</span><span class="p">,</span> <span class="n">cstr</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">proc_sql</span><span class="p">(</span><span class="n">cstr</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>    
+    
     <span class="n">v_ls</span> <span class="o">=</span> <span class="n">PROC_</span><span class="o">.</span><span class="n">parseString</span><span class="p">(</span><span class="n">cstr</span><span class="p">)</span>
     
     <span class="n">sls</span> <span class="o">=</span> <span class="p">[]</span>
@@ -134,7 +141,7 @@
     </div>
     <div class="footer">
         &copy; Copyright Stan.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
   </body>
 </html>
