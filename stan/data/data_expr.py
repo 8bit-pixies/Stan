@@ -9,8 +9,8 @@ RESERVED_KEYWORDS = "by data else if set then rename run drop keep".split()
 SEMI_ = Suppress(";")
 
 # define SAS reserved words
-BY, DATA, ELSE, IF, SET, THEN, RENAME, RUN, DROP, KEEP = map(functools.partial(Keyword, caseless=True),
-                                    RESERVED_KEYWORDS)
+BY, DATA, ELSE, IF, SET, THEN, RENAME, RUN, DROP, KEEP = map(functools.partial(Keyword, caseless=True), RESERVED_KEYWORDS)
+
 ID_ = ~MatchFirst(map(functools.partial(Keyword, caseless=True), RESERVED_KEYWORDS)) + \
      Word(alphas+"_", alphanums+"_")
 

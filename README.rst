@@ -43,6 +43,7 @@ Example
     from pandas import DataFrame
     import numpy as np
     import pkgutil
+    from numpy import nan
 .. code:: python
 
     import stan.proc_functions as proc_func
@@ -74,83 +75,83 @@ Example
       <tbody>
         <tr>
           <th>0</th>
-          <td>-1.402090</td>
-          <td> 1.007808</td>
-          <td>-0.761436</td>
-          <td> 1.520951</td>
-          <td>-0.287097</td>
+          <td>-1.245481</td>
+          <td>-1.609963</td>
+          <td> 0.442550</td>
+          <td>-0.056406</td>
+          <td>-0.213349</td>
         </tr>
         <tr>
           <th>1</th>
-          <td>-1.522315</td>
-          <td>-0.170775</td>
-          <td> 0.832071</td>
-          <td>-0.640475</td>
-          <td> 0.434856</td>
+          <td>-1.118754</td>
+          <td> 0.116146</td>
+          <td>-0.032579</td>
+          <td>-0.556940</td>
+          <td> 0.270678</td>
         </tr>
         <tr>
           <th>2</th>
-          <td> 0.161613</td>
-          <td> 1.753123</td>
-          <td>-0.554494</td>
-          <td>-0.102087</td>
-          <td>-0.350737</td>
+          <td> 0.864960</td>
+          <td>-0.479118</td>
+          <td> 2.370390</td>
+          <td> 2.090656</td>
+          <td>-0.475426</td>
         </tr>
         <tr>
           <th>3</th>
-          <td>-0.797706</td>
-          <td>-1.204808</td>
-          <td>-0.405977</td>
-          <td> 0.421891</td>
-          <td>-0.347111</td>
+          <td> 0.434934</td>
+          <td>-2.510176</td>
+          <td> 0.122871</td>
+          <td> 0.077915</td>
+          <td> 0.597477</td>
         </tr>
         <tr>
           <th>4</th>
-          <td> 0.287852</td>
-          <td>-0.647063</td>
-          <td> 1.323138</td>
-          <td> 0.347085</td>
-          <td> 0.606421</td>
+          <td> 0.689308</td>
+          <td> 0.042817</td>
+          <td> 0.217040</td>
+          <td>-1.424120</td>
+          <td>-0.214721</td>
         </tr>
         <tr>
           <th>5</th>
-          <td> 1.711382</td>
-          <td> 0.988707</td>
-          <td>-0.287785</td>
-          <td> 0.862959</td>
-          <td> 0.981112</td>
+          <td>-0.432170</td>
+          <td>-1.344882</td>
+          <td>-0.055934</td>
+          <td> 1.921247</td>
+          <td> 1.519922</td>
         </tr>
         <tr>
           <th>6</th>
-          <td>-0.145970</td>
-          <td>-0.030930</td>
-          <td> 1.219454</td>
-          <td>-0.544475</td>
-          <td> 2.013656</td>
+          <td>-0.837277</td>
+          <td> 0.944802</td>
+          <td>-0.650114</td>
+          <td>-0.297314</td>
+          <td> 1.432118</td>
         </tr>
         <tr>
           <th>7</th>
-          <td> 0.203527</td>
-          <td>-0.460113</td>
-          <td> 0.683482</td>
-          <td>-1.917130</td>
-          <td> 0.683844</td>
+          <td> 1.488292</td>
+          <td>-1.236296</td>
+          <td> 0.128023</td>
+          <td> 2.886408</td>
+          <td>-0.560200</td>
         </tr>
         <tr>
           <th>8</th>
-          <td>-0.397550</td>
-          <td> 1.471630</td>
-          <td> 0.826813</td>
-          <td> 0.107800</td>
-          <td> 0.094163</td>
+          <td>-0.510566</td>
+          <td>-1.736577</td>
+          <td> 0.066769</td>
+          <td>-0.735257</td>
+          <td> 0.178167</td>
         </tr>
         <tr>
           <th>9</th>
-          <td> 0.012285</td>
-          <td>-0.293033</td>
-          <td>-0.133107</td>
-          <td> 0.748343</td>
-          <td> 0.290751</td>
+          <td> 2.540022</td>
+          <td> 0.034493</td>
+          <td>-0.521496</td>
+          <td>-2.189938</td>
+          <td> 0.111702</td>
         </tr>
       </tbody>
     </table>
@@ -191,89 +192,78 @@ Example
           <th>c</th>
           <th>d</th>
           <th>e</th>
-          <th>x</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <th>0</th>
-          <td> 1.007808</td>
-          <td>-0.761436</td>
-          <td> 1.520951</td>
-          <td>-0.287097</td>
-          <td> 2</td>
+          <td>-1.609963</td>
+          <td> 0.442550</td>
+          <td>-0.056406</td>
+          <td>-0.213349</td>
         </tr>
         <tr>
           <th>1</th>
-          <td>-0.170775</td>
-          <td> 0.832071</td>
-          <td>-0.640475</td>
-          <td> 0.434856</td>
-          <td> 0</td>
+          <td> 0.116146</td>
+          <td>-0.032579</td>
+          <td>-0.556940</td>
+          <td> 0.270678</td>
         </tr>
         <tr>
           <th>2</th>
-          <td> 1.753123</td>
-          <td>-0.554494</td>
-          <td>-0.102087</td>
-          <td>-0.350737</td>
-          <td> 2</td>
+          <td>-0.479118</td>
+          <td> 2.370390</td>
+          <td> 2.090656</td>
+          <td>-0.475426</td>
         </tr>
         <tr>
           <th>3</th>
-          <td>-1.204808</td>
-          <td>-0.405977</td>
-          <td> 0.421891</td>
-          <td>-0.347111</td>
-          <td> 0</td>
+          <td>-2.510176</td>
+          <td> 0.122871</td>
+          <td> 0.077915</td>
+          <td> 0.597477</td>
         </tr>
         <tr>
           <th>4</th>
-          <td>-0.647063</td>
-          <td> 1.323138</td>
-          <td> 0.347085</td>
-          <td> 0.606421</td>
-          <td> 0</td>
+          <td> 0.042817</td>
+          <td> 0.217040</td>
+          <td>-1.424120</td>
+          <td>-0.214721</td>
         </tr>
         <tr>
           <th>5</th>
-          <td> 0.988707</td>
-          <td>-0.287785</td>
-          <td> 0.862959</td>
-          <td> 0.981112</td>
-          <td> 2</td>
+          <td>-1.344882</td>
+          <td>-0.055934</td>
+          <td> 1.921247</td>
+          <td> 1.519922</td>
         </tr>
         <tr>
           <th>6</th>
-          <td>-0.030930</td>
-          <td> 1.219454</td>
-          <td>-0.544475</td>
-          <td> 2.013656</td>
-          <td> 0</td>
+          <td> 0.944802</td>
+          <td>-0.650114</td>
+          <td>-0.297314</td>
+          <td> 1.432118</td>
         </tr>
         <tr>
           <th>7</th>
-          <td>-0.460113</td>
-          <td> 0.683482</td>
-          <td>-1.917130</td>
-          <td> 0.683844</td>
-          <td> 0</td>
+          <td>-1.236296</td>
+          <td> 0.128023</td>
+          <td> 2.886408</td>
+          <td>-0.560200</td>
         </tr>
         <tr>
           <th>8</th>
-          <td> 1.471630</td>
-          <td> 0.826813</td>
-          <td> 0.107800</td>
-          <td> 0.094163</td>
-          <td> 2</td>
+          <td>-1.736577</td>
+          <td> 0.066769</td>
+          <td>-0.735257</td>
+          <td> 0.178167</td>
         </tr>
         <tr>
           <th>9</th>
-          <td>-0.293033</td>
-          <td>-0.133107</td>
-          <td> 0.748343</td>
-          <td> 0.290751</td>
-          <td> 0</td>
+          <td> 0.034493</td>
+          <td>-0.521496</td>
+          <td>-2.189938</td>
+          <td> 0.111702</td>
         </tr>
       </tbody>
     </table>
@@ -281,28 +271,21 @@ Example
 
 
 
-``if`` statements combined with ``do`` ``end`` statements were difficult
-
-to implement. Here is my current implementation of if-then-else control
-
-flow, (I'll have to revisit ``if`` and ``do`` ``end`` statements in the
-
-future...)
-
-
 .. code:: python
 
     %%stan
     data df_if;
-        set df;
-        x = if b < 0.3 then 0 else if b < 0.6 then 1 else 2;
+        set df;    
+        if b < 0.3 then x = 0;
+        else if b < 0.6 then x = 1;
+        else x = 2;    
     run;
 
 
 
 .. parsed-literal::
 
-    u"df_if=df\ndf_if['x']=df_if.apply(lambda x : 0 if x[u'b']<0.3 else 1 if x[u'b']<0.6 else 2  , axis=1)\n"
+    u"df_if=df\nfor el in ['x']:\n    if el not in df_if.columns:\n        df_if[el] = np.nan\ndf_if.ix[((df_if[u'b']<0.3)), 'x'] = (0)\nfor el in ['x']:\n    if el not in df_if.columns:\n        df_if[el] = np.nan\ndf_if.ix[((~((df_if[u'b']<0.3))) & (df_if[u'b']<0.6)), 'x'] = (1)\ndf_if.ix[((~((df_if[u'b']<0.6))) & (~((df_if[u'b']<0.3)))), 'x'] = (2)\n"
 
 
 
@@ -331,92 +314,92 @@ future...)
       <tbody>
         <tr>
           <th>0</th>
-          <td>-1.402090</td>
-          <td> 1.007808</td>
-          <td>-0.761436</td>
-          <td> 1.520951</td>
-          <td>-0.287097</td>
-          <td> 2</td>
+          <td>-1.245481</td>
+          <td>-1.609963</td>
+          <td> 0.442550</td>
+          <td>-0.056406</td>
+          <td>-0.213349</td>
+          <td> 0</td>
         </tr>
         <tr>
           <th>1</th>
-          <td>-1.522315</td>
-          <td>-0.170775</td>
-          <td> 0.832071</td>
-          <td>-0.640475</td>
-          <td> 0.434856</td>
+          <td>-1.118754</td>
+          <td> 0.116146</td>
+          <td>-0.032579</td>
+          <td>-0.556940</td>
+          <td> 0.270678</td>
           <td> 0</td>
         </tr>
         <tr>
           <th>2</th>
-          <td> 0.161613</td>
-          <td> 1.753123</td>
-          <td>-0.554494</td>
-          <td>-0.102087</td>
-          <td>-0.350737</td>
-          <td> 2</td>
+          <td> 0.864960</td>
+          <td>-0.479118</td>
+          <td> 2.370390</td>
+          <td> 2.090656</td>
+          <td>-0.475426</td>
+          <td> 0</td>
         </tr>
         <tr>
           <th>3</th>
-          <td>-0.797706</td>
-          <td>-1.204808</td>
-          <td>-0.405977</td>
-          <td> 0.421891</td>
-          <td>-0.347111</td>
+          <td> 0.434934</td>
+          <td>-2.510176</td>
+          <td> 0.122871</td>
+          <td> 0.077915</td>
+          <td> 0.597477</td>
           <td> 0</td>
         </tr>
         <tr>
           <th>4</th>
-          <td> 0.287852</td>
-          <td>-0.647063</td>
-          <td> 1.323138</td>
-          <td> 0.347085</td>
-          <td> 0.606421</td>
+          <td> 0.689308</td>
+          <td> 0.042817</td>
+          <td> 0.217040</td>
+          <td>-1.424120</td>
+          <td>-0.214721</td>
           <td> 0</td>
         </tr>
         <tr>
           <th>5</th>
-          <td> 1.711382</td>
-          <td> 0.988707</td>
-          <td>-0.287785</td>
-          <td> 0.862959</td>
-          <td> 0.981112</td>
-          <td> 2</td>
-        </tr>
-        <tr>
-          <th>6</th>
-          <td>-0.145970</td>
-          <td>-0.030930</td>
-          <td> 1.219454</td>
-          <td>-0.544475</td>
-          <td> 2.013656</td>
+          <td>-0.432170</td>
+          <td>-1.344882</td>
+          <td>-0.055934</td>
+          <td> 1.921247</td>
+          <td> 1.519922</td>
           <td> 0</td>
         </tr>
         <tr>
+          <th>6</th>
+          <td>-0.837277</td>
+          <td> 0.944802</td>
+          <td>-0.650114</td>
+          <td>-0.297314</td>
+          <td> 1.432118</td>
+          <td> 2</td>
+        </tr>
+        <tr>
           <th>7</th>
-          <td> 0.203527</td>
-          <td>-0.460113</td>
-          <td> 0.683482</td>
-          <td>-1.917130</td>
-          <td> 0.683844</td>
+          <td> 1.488292</td>
+          <td>-1.236296</td>
+          <td> 0.128023</td>
+          <td> 2.886408</td>
+          <td>-0.560200</td>
           <td> 0</td>
         </tr>
         <tr>
           <th>8</th>
-          <td>-0.397550</td>
-          <td> 1.471630</td>
-          <td> 0.826813</td>
-          <td> 0.107800</td>
-          <td> 0.094163</td>
-          <td> 2</td>
+          <td>-0.510566</td>
+          <td>-1.736577</td>
+          <td> 0.066769</td>
+          <td>-0.735257</td>
+          <td> 0.178167</td>
+          <td> 0</td>
         </tr>
         <tr>
           <th>9</th>
-          <td> 0.012285</td>
-          <td>-0.293033</td>
-          <td>-0.133107</td>
-          <td> 0.748343</td>
-          <td> 0.290751</td>
+          <td> 2.540022</td>
+          <td> 0.034493</td>
+          <td>-0.521496</td>
+          <td>-2.189938</td>
+          <td> 0.111702</td>
           <td> 0</td>
         </tr>
       </tbody>
@@ -485,7 +468,7 @@ future...)
 
 .. parsed-literal::
 
-    u"df2=describe.describe(data=df1,by='a')\n"
+    u"df2=describe.describe(data=df1,by='a')"
 
 
 
@@ -643,7 +626,7 @@ Merges can be achieved in a similar way, by creating a ``proc``:
 
 .. parsed-literal::
 
-    u"df2=merge.merge(dt_left=left,dt_right=right,on='key')\n"
+    u"df2=merge.merge(dt_left=left,dt_right=right,on='key')"
 
 
 
@@ -720,7 +703,7 @@ heres an example showing how you can define your own function and run it
 
 .. parsed-literal::
 
-    u"df_sum=sum_mean_by(data=df_if,by='x')\n"
+    u"df_sum=sum_mean_by(data=df_if,by='x')"
 
 
 
@@ -774,33 +757,117 @@ heres an example showing how you can define your own function and run it
       <tbody>
         <tr>
           <th>0</th>
-          <td>-1.962327</td>
-          <td>-0.327055</td>
-          <td>-2.806722</td>
-          <td>-0.467787</td>
-          <td> 3.519061</td>
-          <td> 0.586510</td>
-          <td>-1.584762</td>
-          <td>-0.264127</td>
-          <td> 3.682416</td>
-          <td> 0.613736</td>
+          <td> 2.710545</td>
+          <td> 0.301172</td>
+          <td>-8.723557</td>
+          <td>-0.969284</td>
+          <td> 2.737635</td>
+          <td> 0.304182</td>
+          <td> 2.013566</td>
+          <td> 0.223730</td>
+          <td> 1.214251</td>
+          <td> 0.134917</td>
         </tr>
         <tr>
           <th>2</th>
-          <td> 0.073355</td>
-          <td> 0.018339</td>
-          <td> 5.221268</td>
-          <td> 1.305317</td>
-          <td>-0.776902</td>
-          <td>-0.194225</td>
-          <td> 2.389623</td>
-          <td> 0.597406</td>
-          <td> 0.437441</td>
-          <td> 0.109360</td>
+          <td>-0.837277</td>
+          <td>-0.837277</td>
+          <td> 0.944802</td>
+          <td> 0.944802</td>
+          <td>-0.650114</td>
+          <td>-0.650114</td>
+          <td>-0.297314</td>
+          <td>-0.297314</td>
+          <td> 1.432118</td>
+          <td> 1.432118</td>
         </tr>
       </tbody>
     </table>
     </div>
 
+
+
+``proc sql`` is supported through the ``pandasql`` library. So the above
+
+table could have been produced via SQL as well.
+
+
+.. code:: python
+
+    import pandasql
+    
+    q = """
+    select 
+        sum(a) as sum_a,
+        sum(b) as sum_b,
+        sum(c) as sum_c,
+        sum(d) as sum_d,
+        sum(e) as sum_e,
+        avg(a) as avg_a,
+        avg(b) as avg_b,
+        avg(c) as avg_c,
+        avg(d) as avg_d,
+        avg(e) as avg_e
+    from
+        df_if
+    group by x
+    """
+    
+    df_sum_sql = pandasql.sqldf(q, locals())
+    df_sum_sql
+    
+    
+
+
+
+.. raw:: html
+
+    <div style="max-height:1000px;max-width:1500px;overflow:auto;">
+    <table border="1" class="dataframe">
+      <thead>
+        <tr style="text-align: right;">
+          <th></th>
+          <th>sum_a</th>
+          <th>sum_b</th>
+          <th>sum_c</th>
+          <th>sum_d</th>
+          <th>sum_e</th>
+          <th>avg_a</th>
+          <th>avg_b</th>
+          <th>avg_c</th>
+          <th>avg_d</th>
+          <th>avg_e</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>0</th>
+          <td> 2.710545</td>
+          <td>-8.723557</td>
+          <td> 2.737635</td>
+          <td> 2.013566</td>
+          <td> 1.214251</td>
+          <td> 0.301172</td>
+          <td>-0.969284</td>
+          <td> 0.304182</td>
+          <td> 0.223730</td>
+          <td> 0.134917</td>
+        </tr>
+        <tr>
+          <th>1</th>
+          <td>-0.837277</td>
+          <td> 0.944802</td>
+          <td>-0.650114</td>
+          <td>-0.297314</td>
+          <td> 1.432118</td>
+          <td>-0.837277</td>
+          <td> 0.944802</td>
+          <td>-0.650114</td>
+          <td>-0.297314</td>
+          <td> 1.432118</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
 
 
