@@ -113,7 +113,715 @@
 </ul>
 </div>
 
+<hr>
 
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">stan.transcompile</span> <span class="kn">import</span> <span class="n">transcompile</span>
+<span class="kn">import</span> <span class="nn">stan.stan_magic</span>
+<span class="kn">from</span> <span class="nn">pandas</span> <span class="kn">import</span> <span class="n">DataFrame</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pkgutil</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">nan</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">stan.proc_functions</span> <span class="kn">as</span> <span class="nn">proc_func</span>
+
+<span class="n">mod_name</span> <span class="o">=</span> <span class="p">[</span><span class="s">"from stan.proc_functions import </span><span class="si">%s</span><span class="s">"</span> <span class="o">%</span> <span class="n">name</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">pkgutil</span><span class="o">.</span><span class="n">iter_modules</span><span class="p">(</span><span class="n">proc_func</span><span class="o">.</span><span class="n">__path__</span><span class="p">)]</span>
+<span class="k">exec</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">mod_name</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c"># create an example data frame</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s">'a'</span><span class="p">,</span><span class="s">'b'</span><span class="p">,</span><span class="s">'c'</span><span class="p">,</span><span class="s">'d'</span><span class="p">,</span><span class="s">'e'</span><span class="p">])</span>
+<span class="n">df</span>
+</pre></div>
+</div>
+<div style="max-height:1000px;max-width:1500px;overflow:auto;">
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>d</th>
+      <th>e</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>-1.245481</td>
+      <td>-1.609963</td>
+      <td> 0.442550</td>
+      <td>-0.056406</td>
+      <td>-0.213349</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-1.118754</td>
+      <td> 0.116146</td>
+      <td>-0.032579</td>
+      <td>-0.556940</td>
+      <td> 0.270678</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td> 0.864960</td>
+      <td>-0.479118</td>
+      <td> 2.370390</td>
+      <td> 2.090656</td>
+      <td>-0.475426</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td> 0.434934</td>
+      <td>-2.510176</td>
+      <td> 0.122871</td>
+      <td> 0.077915</td>
+      <td> 0.597477</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td> 0.689308</td>
+      <td> 0.042817</td>
+      <td> 0.217040</td>
+      <td>-1.424120</td>
+      <td>-0.214721</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>-0.432170</td>
+      <td>-1.344882</td>
+      <td>-0.055934</td>
+      <td> 1.921247</td>
+      <td> 1.519922</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>-0.837277</td>
+      <td> 0.944802</td>
+      <td>-0.650114</td>
+      <td>-0.297314</td>
+      <td> 1.432118</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td> 1.488292</td>
+      <td>-1.236296</td>
+      <td> 0.128023</td>
+      <td> 2.886408</td>
+      <td>-0.560200</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>-0.510566</td>
+      <td>-1.736577</td>
+      <td> 0.066769</td>
+      <td>-0.735257</td>
+      <td> 0.178167</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td> 2.540022</td>
+      <td> 0.034493</td>
+      <td>-0.521496</td>
+      <td>-2.189938</td>
+      <td> 0.111702</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class="code python highlight-python"><div class="highlight"><pre>%%stan
+data test;
+set df (drop = a);
+run;
+</pre></div>
+</div>
+<pre class="literal-block">u"test=df.drop(['a'],1)n"
+</pre>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="k">exec</span><span class="p">(</span><span class="n">_</span><span class="p">)</span>
+<span class="n">test</span>
+</pre></div>
+</div>
+<div style="max-height:1000px;max-width:1500px;overflow:auto;">
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>b</th>
+      <th>c</th>
+      <th>d</th>
+      <th>e</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>-1.609963</td>
+      <td> 0.442550</td>
+      <td>-0.056406</td>
+      <td>-0.213349</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td> 0.116146</td>
+      <td>-0.032579</td>
+      <td>-0.556940</td>
+      <td> 0.270678</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-0.479118</td>
+      <td> 2.370390</td>
+      <td> 2.090656</td>
+      <td>-0.475426</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-2.510176</td>
+      <td> 0.122871</td>
+      <td> 0.077915</td>
+      <td> 0.597477</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td> 0.042817</td>
+      <td> 0.217040</td>
+      <td>-1.424120</td>
+      <td>-0.214721</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>-1.344882</td>
+      <td>-0.055934</td>
+      <td> 1.921247</td>
+      <td> 1.519922</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td> 0.944802</td>
+      <td>-0.650114</td>
+      <td>-0.297314</td>
+      <td> 1.432118</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>-1.236296</td>
+      <td> 0.128023</td>
+      <td> 2.886408</td>
+      <td>-0.560200</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>-1.736577</td>
+      <td> 0.066769</td>
+      <td>-0.735257</td>
+      <td> 0.178167</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td> 0.034493</td>
+      <td>-0.521496</td>
+      <td>-2.189938</td>
+      <td> 0.111702</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class="code python highlight-python"><div class="highlight"><pre>%%stan
+data df_if;
+    set df;
+    if b &lt; 0.3 then x = 0;
+    else if b &lt; 0.6 then x = 1;
+    else x = 2;
+run;
+</pre></div>
+</div>
+<pre class="literal-block">u"df_if=dfnfor el in ['x']:n    if el not in df_if.columns:n        df_if[el] = np.nanndf_if.ix[((df_if[u'b']&lt;0.3)), 'x'] = (0)nfor el in ['x']:n    if el not in df_if.columns:n        df_if[el] = np.nanndf_if.ix[((~((df_if[u'b']&lt;0.3))) &amp; (df_if[u'b']&lt;0.6)), 'x'] = (1)ndf_if.ix[((~((df_if[u'b']&lt;0.6))) &amp; (~((df_if[u'b']&lt;0.3)))), 'x'] = (2)n"
+</pre>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="k">exec</span><span class="p">(</span><span class="n">_</span><span class="p">)</span>
+<span class="n">df_if</span>
+</pre></div>
+</div>
+<div style="max-height:1000px;max-width:1500px;overflow:auto;">
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>d</th>
+      <th>e</th>
+      <th>x</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>-1.245481</td>
+      <td>-1.609963</td>
+      <td> 0.442550</td>
+      <td>-0.056406</td>
+      <td>-0.213349</td>
+      <td> 0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-1.118754</td>
+      <td> 0.116146</td>
+      <td>-0.032579</td>
+      <td>-0.556940</td>
+      <td> 0.270678</td>
+      <td> 0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td> 0.864960</td>
+      <td>-0.479118</td>
+      <td> 2.370390</td>
+      <td> 2.090656</td>
+      <td>-0.475426</td>
+      <td> 0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td> 0.434934</td>
+      <td>-2.510176</td>
+      <td> 0.122871</td>
+      <td> 0.077915</td>
+      <td> 0.597477</td>
+      <td> 0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td> 0.689308</td>
+      <td> 0.042817</td>
+      <td> 0.217040</td>
+      <td>-1.424120</td>
+      <td>-0.214721</td>
+      <td> 0</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>-0.432170</td>
+      <td>-1.344882</td>
+      <td>-0.055934</td>
+      <td> 1.921247</td>
+      <td> 1.519922</td>
+      <td> 0</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>-0.837277</td>
+      <td> 0.944802</td>
+      <td>-0.650114</td>
+      <td>-0.297314</td>
+      <td> 1.432118</td>
+      <td> 2</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td> 1.488292</td>
+      <td>-1.236296</td>
+      <td> 0.128023</td>
+      <td> 2.886408</td>
+      <td>-0.560200</td>
+      <td> 0</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>-0.510566</td>
+      <td>-1.736577</td>
+      <td> 0.066769</td>
+      <td>-0.735257</td>
+      <td> 0.178167</td>
+      <td> 0</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td> 2.540022</td>
+      <td> 0.034493</td>
+      <td>-0.521496</td>
+      <td>-2.189938</td>
+      <td> 0.111702</td>
+      <td> 0</td>
+    </tr>
+  </tbody>
+</table>
+</div><hr class="docutils">
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c"># procs can be added manually they can be thought of as python functions</span>
+<span class="c"># you can define your own, though I need to work on the parser</span>
+<span class="c"># to get it "smooth"</span>
+
+<span class="n">df1</span> <span class="o">=</span> <span class="n">DataFrame</span><span class="p">({</span><span class="s">'a'</span> <span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s">'b'</span> <span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="p">},</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+<span class="n">df1</span>
+</pre></div>
+</div>
+<div style="max-height:1000px;max-width:1500px;overflow:auto;">
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>  True</td>
+      <td> False</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td> False</td>
+      <td>  True</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>  True</td>
+      <td>  True</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class="code python highlight-python"><div class="highlight"><pre>%%stan
+proc describe data = df1 out = df2;
+by a;
+run;
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">u"df2=describe.describe(data=df1,by='a')"</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="k">exec</span><span class="p">(</span><span class="n">_</span><span class="p">)</span>
+<span class="n">df2</span>
+</pre></div>
+</div>
+<div style="max-height:1000px;max-width:1500px;overflow:auto;">
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+    </tr>
+    <tr>
+      <th>a</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="8" valign="top">False</th>
+      <th>count</th>
+      <td>     1</td>
+      <td>         1</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>     0</td>
+      <td>         1</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>   NaN</td>
+      <td>       NaN</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td> False</td>
+      <td>      True</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td> False</td>
+      <td>      True</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>     0</td>
+      <td>         1</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td> False</td>
+      <td>      True</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td> False</td>
+      <td>      True</td>
+    </tr>
+    <tr>
+      <th rowspan="8" valign="top">True </th>
+      <th>count</th>
+      <td>     2</td>
+      <td>         2</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>     1</td>
+      <td>       0.5</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>     0</td>
+      <td> 0.7071068</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>  True</td>
+      <td>     False</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>     1</td>
+      <td>      0.25</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>     1</td>
+      <td>       0.5</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>     1</td>
+      <td>      0.75</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>  True</td>
+      <td>      True</td>
+    </tr>
+  </tbody>
+</table>
+</div><p>The proc actually isn’t difficult to write. So for the above code it is</p>
+<p>actually just this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">describe</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">by</span><span class="p">):</span>
+
+    <span class="k">return</span> <span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="p">)</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This functionality allow you to handle most of the <tt class="docutils literal"><span class="pre">by</span></tt> and <tt class="docutils literal"><span class="pre">retain</span></tt></p>
+<p>cases. For languages like Python and R, the normal way to handle data is</p>
+<p>through the split-apply-combine methodology.</p>
+<p>Merges can be achieved in a similar way, by creating a <tt class="docutils literal"><span class="pre">proc</span></tt>:</p>
+<div class="code python highlight-python"><div class="highlight"><pre>%%stan
+proc merge out = df2;
+dt_left left;
+dt_right right;
+on = 'key';
+run;
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">u"df2=merge.merge(dt_left=left,dt_right=right,on='key')"</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">left</span> <span class="o">=</span> <span class="n">DataFrame</span><span class="p">({</span><span class="s">'key'</span><span class="p">:</span> <span class="p">[</span><span class="s">'foo'</span><span class="p">,</span> <span class="s">'foo'</span><span class="p">],</span> <span class="s">'lval'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]})</span>
+<span class="n">right</span> <span class="o">=</span> <span class="n">DataFrame</span><span class="p">({</span><span class="s">'key'</span><span class="p">:</span> <span class="p">[</span><span class="s">'foo'</span><span class="p">,</span> <span class="s">'foo'</span><span class="p">],</span> <span class="s">'rval'</span><span class="p">:</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]})</span>
+
+<span class="k">exec</span><span class="p">(</span><span class="n">_</span><span class="p">)</span>
+<span class="n">df2</span>
+</pre></div>
+</div>
+<div style="max-height:1000px;max-width:1500px;overflow:auto;">
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>key</th>
+      <th>lval</th>
+      <th>rval</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td> foo</td>
+      <td> 1</td>
+      <td> 4</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td> foo</td>
+      <td> 1</td>
+      <td> 5</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td> foo</td>
+      <td> 2</td>
+      <td> 4</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td> foo</td>
+      <td> 2</td>
+      <td> 5</td>
+    </tr>
+  </tbody>
+</table>
+</div><p>heres an example showing how you can define your own function and run it</p>
+<p>(not a function that came with the package)</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">sum_mean_by</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">by</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre>%%stan
+proc sum_mean_by data = df_if out = df_sum;
+by x;
+run;
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">u"df_sum=sum_mean_by(data=df_if,by='x')"</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="k">exec</span><span class="p">(</span><span class="n">_</span><span class="p">)</span>
+<span class="n">df_sum</span>
+</pre></div>
+</div>
+<div style="max-height:1000px;max-width:1500px;overflow:auto;">
+<table border="1" class="dataframe">
+  <thead>
+    <tr>
+      <th></th>
+      <th colspan="2" halign="left">a</th>
+      <th colspan="2" halign="left">b</th>
+      <th colspan="2" halign="left">c</th>
+      <th colspan="2" halign="left">d</th>
+      <th colspan="2" halign="left">e</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th>sum</th>
+      <th>mean</th>
+      <th>sum</th>
+      <th>mean</th>
+      <th>sum</th>
+      <th>mean</th>
+      <th>sum</th>
+      <th>mean</th>
+      <th>sum</th>
+      <th>mean</th>
+    </tr>
+    <tr>
+      <th>x</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td> 2.710545</td>
+      <td> 0.301172</td>
+      <td>-8.723557</td>
+      <td>-0.969284</td>
+      <td> 2.737635</td>
+      <td> 0.304182</td>
+      <td> 2.013566</td>
+      <td> 0.223730</td>
+      <td> 1.214251</td>
+      <td> 0.134917</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-0.837277</td>
+      <td>-0.837277</td>
+      <td> 0.944802</td>
+      <td> 0.944802</td>
+      <td>-0.650114</td>
+      <td>-0.650114</td>
+      <td>-0.297314</td>
+      <td>-0.297314</td>
+      <td> 1.432118</td>
+      <td> 1.432118</td>
+    </tr>
+  </tbody>
+</table>
+</div><p><tt class="docutils literal"><span class="pre">proc</span> <span class="pre">sql</span></tt> is supported through the <tt class="docutils literal"><span class="pre">pandasql</span></tt> library. So the above</p>
+<p>table could have been produced via SQL as well.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">pandasql</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="s">"""</span>
+<span class="s">select</span>
+<span class="s">    sum(a) as sum_a,</span>
+<span class="s">    sum(b) as sum_b,</span>
+<span class="s">    sum(c) as sum_c,</span>
+<span class="s">    sum(d) as sum_d,</span>
+<span class="s">    sum(e) as sum_e,</span>
+<span class="s">    avg(a) as avg_a,</span>
+<span class="s">    avg(b) as avg_b,</span>
+<span class="s">    avg(c) as avg_c,</span>
+<span class="s">    avg(d) as avg_d,</span>
+<span class="s">    avg(e) as avg_e</span>
+<span class="s">from</span>
+<span class="s">    df_if</span>
+<span class="s">group by x</span>
+<span class="s">"""</span>
+
+<span class="n">df_sum_sql</span> <span class="o">=</span> <span class="n">pandasql</span><span class="o">.</span><span class="n">sqldf</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="nb">locals</span><span class="p">())</span>
+<span class="n">df_sum_sql</span>
+</pre></div>
+</div>
+<div style="max-height:1000px;max-width:1500px;overflow:auto;">
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>sum_a</th>
+      <th>sum_b</th>
+      <th>sum_c</th>
+      <th>sum_d</th>
+      <th>sum_e</th>
+      <th>avg_a</th>
+      <th>avg_b</th>
+      <th>avg_c</th>
+      <th>avg_d</th>
+      <th>avg_e</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td> 2.710545</td>
+      <td>-8.723557</td>
+      <td> 2.737635</td>
+      <td> 2.013566</td>
+      <td> 1.214251</td>
+      <td> 0.301172</td>
+      <td>-0.969284</td>
+      <td> 0.304182</td>
+      <td> 0.223730</td>
+      <td> 0.134917</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-0.837277</td>
+      <td> 0.944802</td>
+      <td>-0.650114</td>
+      <td>-0.297314</td>
+      <td> 1.432118</td>
+      <td>-0.837277</td>
+      <td> 0.944802</td>
+      <td>-0.650114</td>
+      <td>-0.297314</td>
+      <td> 1.432118</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
           </div>
         </div>
       </div>
