@@ -1,7 +1,7 @@
 Statistical Analysis System (SAS) Transcompiler to SciPy
 ==================================================
 
-.. image:: https://travis-ci.org/chappers/Stan.png?branch=dev   :target: https://travis-ci.org/chappers/Stan
+.. image:: https://travis-ci.org/chappers/Stan.svg?branch=dev   :target: https://travis-ci.org/chappers/Stan
 
 The goal of this is to transcompile a subset of SAS/Base to SciPy.
 
